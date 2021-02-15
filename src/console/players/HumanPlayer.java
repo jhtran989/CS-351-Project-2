@@ -1,6 +1,8 @@
 package console.players;
 
 import console.gamePieces.Boneyard;
+import console.gamePieces.Domino;
+import exceptions.DominoOutOfBoundsException;
 import exceptions.InputErrorException;
 import utilities.CustomParser;
 
@@ -15,7 +17,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    protected void conductTurn() {
+    public void conductTurn() {
         System.out.println(hand);
         System.out.println("Human's turn");
 
@@ -29,11 +31,14 @@ public class HumanPlayer extends Player {
 
             switch (parsedInput) {
                 case 'p':
+                    playDomino();
                 case 'd':
+
                 case 'q':
                     System.out.println("Thanks for playing!");
                     return;
                 default:
+                    throw new InputErrorException();
             }
         } catch (InputErrorException inputErrorException) {
             System.out.println(inputErrorException.getMessage());
@@ -45,14 +50,42 @@ public class HumanPlayer extends Player {
         String input;
 
         try {
-            System.out.println("Which Domino?");
+            System.out.println("Which Domino? (Index will start at 0 at the " +
+                    "leftmost position.)");
             input = scanner.nextLine();
             int dominoIndex = CustomParser.parseInt(input);
+            hand.checkDominoBounds(dominoIndex);
+            Domino domino = hand.playDomino(dominoIndex);
 
             System.out.println("Left or Right? (l/r)");
+            input = scanner.nextLine();
+            char leftRight = CustomParser.parseChar(input);
+            if (leftRight != 'l' && leftRight != 'r') {
+                throw new InputErrorException();
+            }
+
             System.out.println("Rotate first? (y/n)");
-        } catch (InputErrorException inputErrorException) {
-            inputErrorException.printStackTrace();
+            input = scanner.nextLine();
+            char rotate = CustomParser.parseChar(input);
+            if (rotate != 'y' && rotate != 'n') {
+                throw new InputErrorException();
+            }
+            if (rotate == 'y') {
+                domino.rotateDomino();
+            }
+
+            System.out.println("Playing " + domino);
+            if (leftRight == 'l') {
+                playAreaDominos.add(0, domino);
+            } else {
+                playAreaDominos.add(domino);
+            }
+        } catch (InputErrorException | DominoOutOfBoundsException exception) {
+            System.out.println(exception.getMessage());
         }
+    }
+
+    private void drawDomino() {
+        System.out.println("Drawing a random domino from the boneyard...");
     }
 }

@@ -30,4 +30,12 @@ public class Boneyard {
 
         return dominoBoneyard.remove(dominoIndex);
     }
+
+    public boolean isEmpty() {
+        return dominoBoneyard.isEmpty();
+    }
+
+    public int getNumDominos() {
+        return dominoBoneyard.size();
+    }
 }

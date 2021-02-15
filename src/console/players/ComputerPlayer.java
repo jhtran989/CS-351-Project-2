@@ -8,7 +8,7 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    protected void conductTurn() {
+    public void conductTurn() {
 
     }
 }

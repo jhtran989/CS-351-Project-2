@@ -24,7 +24,7 @@ public class Domino {
         return newBoneyard;
     }
 
-    private void rotateDomino() {
+    public void rotateDomino() {
         int dummy = leftSide;
         leftSide = rightSide;
         rightSide = dummy;
