@@ -31,6 +31,7 @@ public class HumanPlayer extends Player {
                     playDomino();
                 case 'd':
                     drawDomino();
+                    conductTurn();
                 case 'q':
                     System.out.println("Thanks for playing!");
                     return;

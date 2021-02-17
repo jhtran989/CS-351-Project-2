@@ -25,9 +25,18 @@ public class Boneyard {
         return initialHand;
     }
 
-    public Domino takeDomino() {
-        int dominoIndex = random.nextInt(dominoBoneyard.size());
+    /**
+     * Removes a random domino, if there's still a domino in the boneyard;
+     * else, returns null
+     *
+     * @return (above)
+     */
+    public Domino removeRandomDomino() {
+        if (dominoBoneyard.isEmpty()) {
+            return null;
+        }
 
+        int dominoIndex = random.nextInt(dominoBoneyard.size());
         return dominoBoneyard.remove(dominoIndex);
     }
 

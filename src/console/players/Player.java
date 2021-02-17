@@ -36,12 +36,34 @@ public abstract class Player {
         return hand.getNumDominos();
     }
 
+    public int getPlayNumDominos() {
+        if (playAreaDominos.contains(Domino.HALF_BLANK)) {
+            return playAreaDominos.size() - 1;
+        }
+
+        return playAreaDominos.size();
+    }
+
+    public Domino getFirstPlayDomino() {
+        if (playAreaDominos.contains(Domino.HALF_BLANK)) {
+            return playAreaDominos.get(1);
+        }
+
+        return playAreaDominos.get(0);
+    }
+
+    public Domino getLastPlayDomino() {
+        return playAreaDominos.get(playAreaDominos.size() - 1);
+    }
+
     public void addShift() {
-        hand.addHalfBlank();
+        if (!playAreaDominos.contains(Domino.HALF_BLANK)) {
+            playAreaDominos.add(0, Domino.HALF_BLANK);
+        }
     }
 
     public void removeShift() {
-        hand.removeHalfBlank();
+        playAreaDominos.remove(Domino.HALF_BLANK);
     }
 
     public void resetShift() {

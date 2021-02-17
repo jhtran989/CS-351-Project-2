@@ -1,7 +1,5 @@
 package console.gamePieces;
 
-import console.gamePieces.Boneyard;
-import console.gamePieces.Domino;
 import exceptions.DominoOutOfBoundsException;
 
 import java.util.List;
@@ -19,24 +17,17 @@ public class Hand {
     }
 
     public Domino drawDomino() {
-        Domino domino = boneyard.takeDomino();
-        hand.add(domino);
+        Domino domino = boneyard.removeRandomDomino();
+
+        if (domino != null) {
+            hand.add(domino);
+        }
 
         return domino;
     }
 
     public Domino playDomino(int index) {
         return hand.remove(index);
-    }
-
-    public void addHalfBlank() {
-        if (!hand.contains(Domino.HALF_BLANK)) {
-            hand.add(0, Domino.HALF_BLANK);
-        }
-    }
-
-    public void removeHalfBlank() {
-        hand.remove(Domino.HALF_BLANK);
     }
 
     public void checkDominoBounds(int index) throws DominoOutOfBoundsException {
@@ -46,11 +37,28 @@ public class Hand {
     }
 
     public int getNumDominos() {
-        if (hand.contains(Domino.HALF_BLANK)) {
-            return hand.size() - 1;
+        return hand.size();
+    }
+
+    /**
+     * If the domino is found with the given domino value, the matching value
+     * will always be on the LEFT side (for convenience later on for coding
+     * the AI for the computer play) for the returned Domino object
+     *
+     * @param dominoValue
+     * @return
+     */
+    public Domino searchDomino(int dominoValue) {
+        for (Domino domino : hand) {
+            if (dominoValue == domino.getLeftSide()) {
+                return domino;
+            } else if (dominoValue == domino.getRightSide()) {
+                domino.rotateDomino();
+                return domino;
+            }
         }
 
-        return hand.size();
+        return null; // returns null if the domino value was not found
     }
 
     @Override
