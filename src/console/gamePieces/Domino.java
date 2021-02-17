@@ -7,6 +7,15 @@ public class Domino {
     private int leftSide;
     private int rightSide;
 
+    // created only for shifting purposes (not actually a blank domino, but
+    // to incorporate the row shift by half a domino)
+    public static Domino HALF_BLANK = new Domino(0, 0) {
+        @Override
+        public String toString() {
+            return "   ";
+        }
+    };
+
     public Domino(int leftSide, int rightSide) {
         this.leftSide = leftSide;
         this.rightSide = rightSide;
@@ -28,6 +37,14 @@ public class Domino {
         int dummy = leftSide;
         leftSide = rightSide;
         rightSide = dummy;
+    }
+
+    public int getLeftSide() {
+        return leftSide;
+    }
+
+    public int getRightSide() {
+        return rightSide;
     }
 
     @Override

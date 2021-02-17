@@ -35,4 +35,25 @@ public abstract class Player {
     public int getNumDominos() {
         return hand.getNumDominos();
     }
+
+    public void addShift() {
+        hand.addHalfBlank();
+    }
+
+    public void removeShift() {
+        hand.removeHalfBlank();
+    }
+
+    public void resetShift() {
+        shift = false;
+    }
+
+    public void printTray() {
+        System.out.println(hand);
+    }
+
+    @Override
+    public String toString() {
+        return "'s turn";
+    }
 }

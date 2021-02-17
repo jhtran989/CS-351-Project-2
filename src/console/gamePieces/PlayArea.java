@@ -1,5 +1,6 @@
 package console.gamePieces;
 
+import console.players.HumanPlayer;
 import console.players.Player;
 
 import java.util.ArrayList;
@@ -23,10 +24,13 @@ public class PlayArea {
     }
 
     private void startGame() {
+        printInitialMessage();
+
         while (true) {
             for (Player player : playerList) {
                 if (!boneyard.isEmpty()) {
-
+                    printPlayArea();
+                    humanPlayer.printTray();
                     player.conductTurn();
                 } else {
                     return;
@@ -40,11 +44,26 @@ public class PlayArea {
                 "dominos");
 
         for (Player player : playerList) {
-            if (player.isShift()) {
-                System.out.print("   ");
+            Player currentPlayer = player;
+            Player otherPlayer = getOtherPlayer(player);
+
+            if (currentPlayer.isShift()) {
+                currentPlayer.addShift();
+                otherPlayer.removeShift();
             }
 
             player.printPlayAreaDominos();
+        }
+
+//        humanPlayer.resetShift();
+//        computerPlayer.resetShift();
+    }
+
+    private Player getOtherPlayer(Player player) {
+        if (player instanceof HumanPlayer) {
+            return computerPlayer;
+        } else {
+            return humanPlayer;
         }
     }
 

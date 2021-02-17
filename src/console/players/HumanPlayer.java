@@ -18,9 +18,6 @@ public class HumanPlayer extends Player {
 
     @Override
     public void conductTurn() {
-        System.out.println(hand);
-        System.out.println("Human's turn");
-
         System.out.println("[p] Play Domino");
         System.out.println("[d] Draw from boneyard");
         System.out.println("[q] Quit");
@@ -33,7 +30,7 @@ public class HumanPlayer extends Player {
                 case 'p':
                     playDomino();
                 case 'd':
-
+                    drawDomino();
                 case 'q':
                     System.out.println("Thanks for playing!");
                     return;
@@ -74,11 +71,17 @@ public class HumanPlayer extends Player {
                 domino.rotateDomino();
             }
 
-            System.out.println("Playing " + domino);
+            System.out.print("Playing " + domino + " at ");
             if (leftRight == 'l') {
                 playAreaDominos.add(0, domino);
+                System.out.println("left");
+
+                if (getNumDominos() > 1) {
+                    shift = true;
+                }
             } else {
                 playAreaDominos.add(domino);
+                System.out.println("right");
             }
         } catch (InputErrorException | DominoOutOfBoundsException exception) {
             System.out.println(exception.getMessage());
@@ -87,5 +90,13 @@ public class HumanPlayer extends Player {
 
     private void drawDomino() {
         System.out.println("Drawing a random domino from the boneyard...");
+
+        Domino domino = hand.drawDomino();
+        System.out.println("You drew " + domino);
+    }
+
+    @Override
+    public String toString() {
+        return "Human" + super.toString();
     }
 }

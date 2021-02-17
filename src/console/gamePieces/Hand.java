@@ -18,12 +18,25 @@ public class Hand {
         random = ThreadLocalRandom.current();
     }
 
-    public void drawDomino() {
-        hand.add(boneyard.takeDomino());
+    public Domino drawDomino() {
+        Domino domino = boneyard.takeDomino();
+        hand.add(domino);
+
+        return domino;
     }
 
     public Domino playDomino(int index) {
         return hand.remove(index);
+    }
+
+    public void addHalfBlank() {
+        if (!hand.contains(Domino.HALF_BLANK)) {
+            hand.add(0, Domino.HALF_BLANK);
+        }
+    }
+
+    public void removeHalfBlank() {
+        hand.remove(Domino.HALF_BLANK);
     }
 
     public void checkDominoBounds(int index) throws DominoOutOfBoundsException {
@@ -33,6 +46,10 @@ public class Hand {
     }
 
     public int getNumDominos() {
+        if (hand.contains(Domino.HALF_BLANK)) {
+            return hand.size() - 1;
+        }
+
         return hand.size();
     }
 
