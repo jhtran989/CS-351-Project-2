@@ -31,13 +31,16 @@ public class Hand {
     }
 
     /**
-     * Plays the last domino added to the hand (overloaded from the method
-     * above)
+     * Removes the given domino from the hand and returns the same domino
+     * (for consistency when overloading the method above)
      *
-     * @return the removed domino (last in the list)
+     * Precondition: the domino is already determined to contained in the hand
+     *
+     * @return the removed domino
      */
-    public Domino playDomino() {
-        return hand.remove(hand.size() - 1);
+    public Domino playDomino(Domino domino) {
+        hand.remove(domino);
+        return domino;
     }
 
     public void checkDominoBounds(int index) throws DominoOutOfBoundsException {
@@ -56,10 +59,12 @@ public class Hand {
      * Domino object (i.e. the matching value on the left of the domino will
      * match the right value) where 0 is left and 1 is right
      *
+     * Note: for the ComputerPlayer
+     *
      * @param dominoValue
      * @return
      */
-    public Domino searchDomino(int dominoValue, int matchIndex) {
+    public Domino searchDominoAutoRotate(int dominoValue, int matchIndex) {
         for (Domino domino : hand) {
             if (dominoValue == domino.getLeftSide()) {
                 if (matchIndex == 0) {
@@ -72,6 +77,27 @@ public class Hand {
                     domino.rotateDomino();
                 }
 
+                return domino;
+            }
+        }
+
+        return null; // returns null if the domino value was not found
+    }
+
+    /**
+     * Checks to see if there is a domino in the hand with the given dominoValue
+     * (left or right value)
+     *
+     * Note: for the HumanPlayer
+     *
+     * @param dominoValue value to check
+     * @return true if there is a domino in the hand that has the
+     * dominoValue; false otherwise
+     */
+    public Domino searchDomino(int dominoValue) {
+        for (Domino domino : hand) {
+            if (dominoValue == domino.getLeftSide()
+                    || dominoValue == domino.getRightSide()) {
                 return domino;
             }
         }
@@ -110,6 +136,10 @@ public class Hand {
 
 
         return -1;
+    }
+
+    public Domino getDomino(int index) {
+        return hand.get(index);
     }
 
     public int countDominosInHand() {

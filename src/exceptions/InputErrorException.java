@@ -2,6 +2,6 @@ package exceptions;
 
 public class InputErrorException extends Exception {
     public InputErrorException() {
-        super("Sorry, please enter a valid input.");
+        super("Sorry, please enter a valid input. Please try again.");
     }
 }
