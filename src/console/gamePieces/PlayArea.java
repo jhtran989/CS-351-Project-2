@@ -23,35 +23,84 @@ public class PlayArea {
         playerList.add(computerPlayer);
     }
 
-    private void startGame() {
+    public void startGame() {
         printInitialMessage();
+        humanPlayer.setOtherPlayer(computerPlayer);
+        computerPlayer.setOtherPlayer(humanPlayer);
+        printPlayArea(humanPlayer);
 
+        Player currentPlayer = null;
         while (true) {
             for (Player player : playerList) {
-                if (!boneyard.isEmpty()) {
-                    printPlayArea();
-                    humanPlayer.printTray();
-                    player.conductTurn();
-                } else {
-                    return;
+                humanPlayer.printTray();
+
+                //FIXME
+                computerPlayer.printTray();
+
+                currentPlayer = player;
+                System.out.println(currentPlayer);
+                player.conductTurn();
+                printPlayArea(currentPlayer);
+
+                if (currentPlayer.isPlayAreaEmpty()
+                        || !(humanPlayer.isTakeTurn()
+                        || computerPlayer.isTakeTurn())) {
+                    break;
                 }
             }
+
+            assert currentPlayer != null;
+            if (currentPlayer.isPlayAreaEmpty() || !(humanPlayer.isTakeTurn()
+                    || computerPlayer.isTakeTurn())) {
+                break;
+            }
+        }
+
+        initiateEndGame(currentPlayer);
+    }
+
+    private void initiateEndGame(Player lastPlayer) {
+        int humanCount = humanPlayer.getCountDomino();
+        int computerCount = computerPlayer.getCountDomino();
+
+        //FIXME
+        System.out.println("Human count: " + humanCount);
+        System.out.println("Computer count: " + computerCount);
+
+        if (humanCount == computerCount) {
+            System.out.println("Since both players have the same count, the "
+                    + lastPlayer.getName() + " won the game!");
+        } else if (humanCount < computerCount) {
+            System.out.println("The " + humanPlayer.getName() + " won the " +
+                    "game!");
+        } else {
+            System.out.println("The " + computerPlayer.getName() + " won the " +
+                    "game!");
         }
     }
 
-    private void printPlayArea() {
+    private void printPlayArea(Player currentPlayer) {
         System.out.println("Boneyard contains " + boneyard.getNumDominos() +
-                "dominos");
+                " dominos");
 
-        for (Player player : playerList) {
-            Player currentPlayer = player;
-            Player otherPlayer = getOtherPlayer(player);
+        Player otherPlayer = getOtherPlayer(currentPlayer);
 
+        if (!otherPlayer.isPlayAreaEmpty()) {
             if (currentPlayer.isShift()) {
                 currentPlayer.addShift();
                 otherPlayer.removeShift();
+            } else {
+                otherPlayer.addShift();
+                currentPlayer.removeShift();
             }
+        }
 
+        //FIXME
+        System.out.println("Human shift: " + humanPlayer.isShift());
+        System.out.println("Computer shift: " + computerPlayer.isShift());
+
+        System.out.println("Play area dominos:");
+        for (Player player : playerList) {
             player.printPlayAreaDominos();
         }
 

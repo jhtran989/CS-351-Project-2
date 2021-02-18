@@ -3,7 +3,9 @@ package console.players;
 import console.gamePieces.Boneyard;
 import console.gamePieces.Domino;
 import exceptions.DominoOutOfBoundsException;
+import exceptions.DrawDominoException;
 import exceptions.InputErrorException;
+import exceptions.PlayDominoException;
 import utilities.CustomParser;
 
 import java.util.Scanner;
@@ -13,11 +15,16 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(Boneyard boneyard) {
         super(boneyard);
+
         scanner = new Scanner(System.in);
     }
 
     @Override
     public void conductTurn() {
+        super.conductTurn();
+
+        printTray();
+
         System.out.println("[p] Play Domino");
         System.out.println("[d] Draw from boneyard");
         System.out.println("[q] Quit");
@@ -29,22 +36,37 @@ public class HumanPlayer extends Player {
             switch (parsedInput) {
                 case 'p':
                     playDomino();
+                    takeTurn = true;
+                    return;
                 case 'd':
                     drawDomino();
                     conductTurn();
                 case 'q':
-                    System.out.println("Thanks for playing!");
+                    System.out.println("The human player did not take a turn." +
+                            "..");
+                    takeTurn = false;
                     return;
                 default:
                     throw new InputErrorException();
             }
-        } catch (InputErrorException inputErrorException) {
+        } catch (InputErrorException | PlayDominoException
+                | DrawDominoException inputErrorException) {
             System.out.println(inputErrorException.getMessage());
             conductTurn();
         }
     }
 
-    private void playDomino() {
+    @Override
+    public String getName() {
+        return "Human";
+    }
+
+    private void playDomino() throws PlayDominoException {
+        Domino matchDomino = findDominoInHand();
+        if (matchDomino == null) {
+            throw new PlayDominoException();
+        }
+
         String input;
 
         try {
@@ -78,22 +100,43 @@ public class HumanPlayer extends Player {
                 System.out.println("left");
 
                 if (getNumDominos() > 1) {
-                    shift = true;
+                    shift = false;
                 }
             } else {
                 playAreaDominos.add(domino);
                 System.out.println("right");
+
+                if (getNumDominos() > 1) {
+                    shift = true;
+                }
             }
         } catch (InputErrorException | DominoOutOfBoundsException exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void drawDomino() {
+    private boolean drawDomino() throws DrawDominoException {
+        Domino matchDomino = findDominoInHand();
+        if (matchDomino != null) {
+            throw new DrawDominoException();
+        }
+
         System.out.println("Drawing a random domino from the boneyard...");
 
         Domino domino = hand.drawDomino();
+        if (domino == null) {
+            System.out.println("Out of dominos...");
+            return false;
+        }
+
         System.out.println("You drew " + domino);
+        return true;
+    }
+
+    @Override
+    public void printTray() {
+        System.out.print("Human's ");
+        super.printTray();
     }
 
     @Override

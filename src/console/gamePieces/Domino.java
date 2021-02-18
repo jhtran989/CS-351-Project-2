@@ -21,11 +21,21 @@ public class Domino {
         this.rightSide = rightSide;
     }
 
+    /**
+     * Creates a deep clone of the domino using a constructor (just sets the
+     * left and right values to the same values as the domino given)
+     * @param domino
+     */
+    public Domino(Domino domino) {
+        this.leftSide = domino.getLeftSide();
+        this.rightSide = domino.getRightSide();
+    }
+
     public static List<Domino> setUpBoneyard() {
         List<Domino> newBoneyard = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = i; j < 6; j++) {
+        for (int i = 0; i <= 6; i++) {
+            for (int j = i; j <= 6; j++) {
                 newBoneyard.add(new Domino(i, j));
             }
         }
