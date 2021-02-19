@@ -4,9 +4,11 @@ import console.gamePieces.Boneyard;
 import console.gamePieces.PlayArea;
 import console.players.ComputerPlayer;
 import console.players.HumanPlayer;
-import console.players.Player;
 
 public class Main {
+    //TODO: sort the protected stuff...
+    public static final boolean DEBUG = true;
+
     public static void main(String[] args) {
         Boneyard boneyard = new Boneyard();
         HumanPlayer humanPlayer = new HumanPlayer(boneyard);

@@ -16,7 +16,7 @@ public class CustomParser {
     public static int parseInt(String input) throws InputErrorException {
         try {
             return Integer.parseInt(input);
-        } catch (InputMismatchException inputMismatchException) {
+        } catch (NumberFormatException numberFormatException) {
             throw new InputErrorException();
         }
     }

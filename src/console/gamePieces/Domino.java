@@ -24,7 +24,9 @@ public class Domino {
     /**
      * Creates a deep clone of the domino using a constructor (just sets the
      * left and right values to the same values as the domino given)
-     * @param domino
+     *
+     * Note: NOT used (after some updates)
+     * @param domino domino object to deep clone
      */
     public Domino(Domino domino) {
         this.leftSide = domino.getLeftSide();

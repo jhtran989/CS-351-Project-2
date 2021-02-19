@@ -9,9 +9,11 @@
 
 ### Afternotes
 
+As always, there might be errors with parsing the input (all the exceptions are not caught), but given the right input, the program should work as intended.
+
 Any `List` structures used will be implemented as an `ArrayList`.
 
-Should hardcode LEFT and RIGHT as 0 and 1, respectively.
+The sides of the board `LEFT` and `RIGHT` are encoded as 0 and 1, respectively, in the `SideOfBoard` enum.
 
 `Domino` class &mdash; `HALF_BLANK` object:*
 
@@ -36,6 +38,10 @@ also, different implementations of the methods (abstract) in `Player` class
 `getName()` method in `Player` abstract class:
 
 implemented later on (not utilized in every place that it should)
+
+`Domino` constructor (used for a deep clone):
+
+not used
 
 *Special problem created with `HALF_BLANK`:
 

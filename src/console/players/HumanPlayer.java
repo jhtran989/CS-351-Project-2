@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class HumanPlayer extends Player {
     private Scanner scanner;
-    private int matchIndex;
+    private SideOfBoard matchSide;
 
     public HumanPlayer(Boneyard boneyard) {
         super(boneyard);
@@ -50,6 +50,7 @@ public class HumanPlayer extends Player {
                                 " anymore...");
                     }
                     conductTurn();
+                    return;
                 case 'q':
                     System.out.println("The human player did not take a turn." +
                             "..");
@@ -82,10 +83,10 @@ public class HumanPlayer extends Player {
 
             if (isShift()) { // extend to the left
                 numsToMatch[0] = otherPlayer.getFirstPlayDomino().getLeftSide();
-                matchIndex = 0;
+                matchSide = SideOfBoard.LEFT;
             } else { // extend to the right
                 numsToMatch[0] = otherPlayer.getLastPlayDomino().getRightSide();
-                matchIndex = 1;
+                matchSide = SideOfBoard.RIGHT;
             }
 
             //FIXME
@@ -115,7 +116,7 @@ public class HumanPlayer extends Player {
             if (dominoMatch != null) {
                 //FIXME
                 System.out.println("Num to match: " + toMatch);
-                System.out.println("Side: " + matchIndex);
+                System.out.println("Side: " + matchSide);
 
                 break;
             }
@@ -231,6 +232,13 @@ public class HumanPlayer extends Player {
     public void printTray() {
         System.out.print("Human's ");
         super.printTray();
+    }
+
+    @Override
+    protected void setSideNumMatchPair() {
+        if (!otherPlayer.playAreaDominos.isEmpty()) {
+            sideNumMatchPair.put(matchSide, numsToMatch[0]);
+        }
     }
 
     @Override

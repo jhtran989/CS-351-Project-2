@@ -7,6 +7,8 @@ import console.gamePieces.Hand;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class Player {
     protected Hand hand;
@@ -18,6 +20,7 @@ public abstract class Player {
     protected boolean setupNumsToMatch;
     protected boolean canPlayDomino;
     protected boolean canDrawDomino;
+    protected Map<SideOfBoard, Integer> sideNumMatchPair;
 
     public Player(Boneyard boneyard) {
         hand = new Hand(boneyard);
@@ -27,10 +30,12 @@ public abstract class Player {
         setupNumsToMatch = false;
         canPlayDomino = true;
         canDrawDomino = true;
+        sideNumMatchPair = new TreeMap<>();
     }
 
     public void conductTurn() {
         setNumsToMatch();
+        setSideNumMatchPair();
     }
 
     public abstract String getName();
@@ -81,8 +86,8 @@ public abstract class Player {
         return playAreaDominos.get(playAreaDominos.size() - 1);
     }
 
-    public void playDominoInPlayArea(int handIndex, SideOfBoard sideOfBoard) {
-        if (sideOfBoard == SideOfBoard.LEFT) {
+    public void playDominoInPlayArea(int handIndex, SideOfBoard matchSide) {
+        if (matchSide == SideOfBoard.LEFT) {
             playAreaDominos.add(0,
                     hand.playDomino(handIndex));
         } else {
@@ -90,8 +95,13 @@ public abstract class Player {
         }
     }
 
-    public void playDominoInPlayArea(Domino domino) {
-        playAreaDominos.add(hand.playDomino(domino));
+    public void playDominoInPlayArea(Domino domino, SideOfBoard matchSide) {
+        if (matchSide == SideOfBoard.LEFT) {
+            playAreaDominos.add(0,
+                    hand.playDomino(domino));
+        } else {
+            playAreaDominos.add(hand.playDomino(domino));
+        }
     }
 
     public void addShift() {
@@ -118,6 +128,8 @@ public abstract class Player {
     public void setOtherPlayer(Player otherPlayer) {
         this.otherPlayer = otherPlayer;
     }
+
+    protected abstract void setSideNumMatchPair();
 
     @Override
     public String toString() {

@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Boneyard {
     private List<Domino> dominoBoneyard;
     private static ThreadLocalRandom random;
+    private final int DOMINO_MAX = 6;
 
     public Boneyard() {
         dominoBoneyard = Domino.setUpBoneyard();
@@ -17,7 +18,7 @@ public class Boneyard {
         List<Domino> initialHand = new ArrayList<>();
 
         int dominoIndex;
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i <= DOMINO_MAX; i++) {
             dominoIndex = random.nextInt(dominoBoneyard.size());
             initialHand.add(dominoBoneyard.remove(dominoIndex));
         }
@@ -38,10 +39,6 @@ public class Boneyard {
 
         int dominoIndex = random.nextInt(dominoBoneyard.size());
         return dominoBoneyard.remove(dominoIndex);
-    }
-
-    public boolean isEmpty() {
-        return dominoBoneyard.isEmpty();
     }
 
     public int getNumDominos() {

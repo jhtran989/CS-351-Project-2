@@ -1,5 +1,6 @@
 package console.gamePieces;
 
+import console.Main;
 import console.players.HumanPlayer;
 import console.players.Player;
 
@@ -34,8 +35,10 @@ public class PlayArea {
             for (Player player : playerList) {
                 humanPlayer.printTray();
 
-                //FIXME
-                computerPlayer.printTray();
+                if (Main.DEBUG) {
+                    //FIXME
+                    computerPlayer.printTray();
+                }
 
                 currentPlayer = player;
                 System.out.println(currentPlayer);
@@ -63,9 +66,11 @@ public class PlayArea {
         int humanCount = humanPlayer.getCountDomino();
         int computerCount = computerPlayer.getCountDomino();
 
-        //FIXME
-        System.out.println("Human count: " + humanCount);
-        System.out.println("Computer count: " + computerCount);
+        if (Main.DEBUG) {
+            //FIXME
+            System.out.println("Human count: " + humanCount);
+            System.out.println("Computer count: " + computerCount);
+        }
 
         if (humanCount == computerCount) {
             System.out.println("Since both players have the same count, the "
@@ -95,17 +100,16 @@ public class PlayArea {
             }
         }
 
-        //FIXME
-        System.out.println("Human shift: " + humanPlayer.isShift());
-        System.out.println("Computer shift: " + computerPlayer.isShift());
+        if (Main.DEBUG) {
+            //FIXME
+            System.out.println("Human shift: " + humanPlayer.isShift());
+            System.out.println("Computer shift: " + computerPlayer.isShift());
+        }
 
         System.out.println("Play area dominos:");
         for (Player player : playerList) {
             player.printPlayAreaDominos();
         }
-
-//        humanPlayer.resetShift();
-//        computerPlayer.resetShift();
     }
 
     private Player getOtherPlayer(Player player) {

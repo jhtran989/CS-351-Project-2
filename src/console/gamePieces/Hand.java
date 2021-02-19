@@ -1,5 +1,7 @@
 package console.gamePieces;
 
+import console.Main;
+import console.constants.SideOfBoard;
 import exceptions.DominoOutOfBoundsException;
 
 import java.util.List;
@@ -62,23 +64,38 @@ public class Hand {
      * Note: for the ComputerPlayer
      *
      * @param dominoValue
+     * @param matchSide
      * @return
      */
-    public Domino searchDominoAutoRotate(int dominoValue, int matchIndex) {
+    public Domino searchDominoAutoRotate(int dominoValue,
+                                         SideOfBoard matchSide) {
+        int dominoIndex = 0;
         for (Domino domino : hand) {
             if (dominoValue == domino.getLeftSide()) {
-                if (matchIndex == 0) {
+                if (matchSide == SideOfBoard.LEFT) {
+                    if (Main.DEBUG) {
+                        System.out.println("Domino (before rotate): "
+                                + domino + " at index " + dominoIndex);
+                    }
+
                     domino.rotateDomino();
                 }
 
                 return domino;
             } else if (dominoValue == domino.getRightSide()) {
-                if (matchIndex == 1) {
+                if (matchSide == SideOfBoard.RIGHT) {
+                    if (Main.DEBUG) {
+                        System.out.println("Domino (before rotate): "
+                                + domino + " at index " + dominoIndex);
+                    }
+
                     domino.rotateDomino();
                 }
 
                 return domino;
             }
+
+            dominoIndex++;
         }
 
         return null; // returns null if the domino value was not found
@@ -95,11 +112,18 @@ public class Hand {
      * dominoValue; false otherwise
      */
     public Domino searchDomino(int dominoValue) {
+        int dominoIndex = 0;
         for (Domino domino : hand) {
             if (dominoValue == domino.getLeftSide()
                     || dominoValue == domino.getRightSide()) {
+                if (Main.DEBUG) {
+                    System.out.println("Index: " + dominoIndex);
+                }
+
                 return domino;
             }
+
+            dominoIndex++;
         }
 
         return null; // returns null if the domino value was not found
@@ -116,26 +140,26 @@ public class Hand {
      * @param domino
      * @return 0 if on left, 1 if on right, -1 if there's no match
      */
-    public int setDominoOrientation(int dominoValue, Domino domino,
-                                    int matchIndex) {
+    public SideOfBoard setDominoOrientation(int dominoValue, Domino domino,
+                                    SideOfBoard matchSide) {
         if (dominoValue == domino.getLeftSide()) {
-            if (matchIndex == 0) {
+            if (matchSide == SideOfBoard.LEFT) {
                 domino.rotateDomino();
-                return 1;
+                return SideOfBoard.LEFT;
             }
 
-            return 0;
+            return SideOfBoard.RIGHT;
         } else if (dominoValue == domino.getRightSide()) {
-            if (matchIndex == 1) {
+            if (matchSide == SideOfBoard.RIGHT) {
                 domino.rotateDomino();
-                return 0;
+                return SideOfBoard.RIGHT;
             }
 
-            return 1;
+            return SideOfBoard.LEFT;
         }
 
 
-        return -1;
+        return null;
     }
 
     public Domino getDomino(int index) {
@@ -155,6 +179,7 @@ public class Hand {
     @Override
     public String toString() {
         String tray = "Tray: [";
+
         boolean start = true;
         for (Domino domino : hand) {
             if (!start) {
@@ -162,8 +187,10 @@ public class Hand {
             } else {
                 start = false;
             }
+
             tray += domino;
         }
+
         tray += "]";
         return tray;
     }
