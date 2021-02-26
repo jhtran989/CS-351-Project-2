@@ -1,6 +1,6 @@
 package console.players;
 
-import console.constants.SideOfBoard;
+import constants.SideOfBoard;
 import console.gamePieces.Boneyard;
 import console.gamePieces.Domino;
 import exceptions.*;
@@ -9,15 +9,24 @@ import utilities.CustomParser;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
+public class HumanPlayer extends PlayerConsole {
     private final Scanner scanner;
     private SideOfBoard matchSide;
 
-    public HumanPlayer(Boneyard<DominoType> boneyard) {
+    public HumanPlayer(Boneyard boneyard) {
         super(boneyard);
 
         numsToMatch = new int[1];
         scanner = new Scanner(System.in);
+    }
+
+    @Override
+    protected Domino findDominoInHand(boolean autoRotate) {
+        if (handDEBUG()) {
+            return Domino.HALF_BLANK;
+        }
+
+        return super.findDominoInHand(autoRotate);
     }
 
     @Override
@@ -78,7 +87,7 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
      */
     @Override
     protected void setNumsToMatch() {
-        if (!otherPlayer.playAreaDominos.isEmpty()) {
+        if (!otherPlayer.isPlayAreaEmpty()) {
             setupNumsToMatch = true;
 
             if (isShift()) { // extend to the left
@@ -97,43 +106,44 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
         }
     }
 
-    @Override
-    protected DominoType findDominoInHand() {
-        //FIXME
-        System.out.println("Find in hand call");
-
-        //FIXME
-        if (!setupNumsToMatch) {
-            System.out.println("Exiting call...");
-            return (DominoType) Domino.HALF_BLANK; // just some output that is NOT null so
-            // canPlayDomino is still true (only to circumvent the first turn)
-        }
-
-        DominoType dominoMatch = null;
-        for (int toMatch : numsToMatch) {
-            dominoMatch = hand.searchDomino(toMatch);
-
-            if (dominoMatch != null) {
-                //FIXME
-                System.out.println("Num to match: " + toMatch);
-                System.out.println("Side: " + matchSide);
-
-                break;
-            }
-        }
-
-        //FIXME
-        if (dominoMatch != null) {
-            System.out.println("Domino match " + dominoMatch);
-        } else {
-            System.out.println("No match");
-        }
-
-        return dominoMatch;
-    }
+//    @Override
+//    protected Domino findDominoInHand() {
+//        //FIXME
+//        System.out.println("Find in hand call");
+//
+//        //FIXME
+//        if (!setupNumsToMatch) {
+//            System.out.println("Exiting call...");
+//            return Domino.HALF_BLANK; // just some output that is NOT null so
+//            // canPlayDomino is still true (only to circumvent the first turn)
+//        }
+//
+//        Domino dominoMatch = null;
+//        for (int toMatch : numsToMatch) {
+//            dominoMatch = hand.searchDomino(toMatch);
+//
+//            if (dominoMatch != null) {
+//                //FIXME
+//                System.out.println("Num to match: " + toMatch);
+//                System.out.println("Side: " + matchSide);
+//
+//                break;
+//            }
+//        }
+//
+//        //FIXME
+//        if (dominoMatch != null) {
+//            System.out.println("Domino match " + dominoMatch);
+//        } else {
+//            System.out.println("No match");
+//        }
+//
+//        return dominoMatch;
+//    }
 
     private void playDomino() throws PlayDominoException {
-        DominoType matchDomino = findDominoInHand();
+        Domino matchDomino = findDominoInHand(false);
+
         if (matchDomino == null) {
             canPlayDomino = false;
             throw new PlayDominoException();
@@ -196,9 +206,10 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
                 playDominoInPlayArea(dominoIndex,
                         SideOfBoard.RIGHT);
 
-                if (getNumDominos() > 1) {
-                    shift = true;
-                }
+                // No change to shift (same shift position)
+                // Any player can place a domino to the right and still
+                // have no shift; the other case would require one of the
+                // players to skip a turn...
             }
         } catch (InputErrorException | DominoOutOfBoundsException
                 | DominoMismatchException exception) {
@@ -208,7 +219,7 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
     }
 
     private boolean drawDomino() throws DrawDominoException {
-        DominoType matchDomino = findDominoInHand();
+        Domino matchDomino = findDominoInHand(false);
         if (matchDomino != null) {
             canDrawDomino = false;
             throw new DrawDominoException();
@@ -218,7 +229,7 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
 
         System.out.println("Drawing a random domino from the boneyard...");
 
-        DominoType domino = hand.drawDomino();
+        Domino domino = hand.drawDomino();
         if (domino == null) {
             System.out.println("Out of dominos...");
             return false;
@@ -236,7 +247,9 @@ public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
 
     @Override
     protected void setSideNumMatchPair() {
-        if (!otherPlayer.playAreaDominos.isEmpty()) {
+        sideNumMatchPair.clear();
+
+        if (!otherPlayer.isPlayAreaEmpty()) {
             sideNumMatchPair.put(matchSide, numsToMatch[0]);
         }
     }

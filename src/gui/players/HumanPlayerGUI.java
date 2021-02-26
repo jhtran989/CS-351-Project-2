@@ -1,11 +1,10 @@
 package gui.players;
 
-import console.gamePieces.Boneyard;
-import console.gamePieces.Domino;
-import console.players.Player;
+import basePieces.BoneyardBase;
+import gui.DominoGUI;
 
-public class HumanPlayerGUI<DominoType extends Domino> extends Player<DominoType> {
-    public HumanPlayerGUI(Boneyard<DominoType> boneyard) {
+public class HumanPlayerGUI extends PlayerGUI {
+    public HumanPlayerGUI(BoneyardBase<DominoGUI> boneyard) {
         super(boneyard);
     }
 
@@ -25,8 +24,28 @@ public class HumanPlayerGUI<DominoType extends Domino> extends Player<DominoType
     }
 
     @Override
-    protected Domino findDominoInHand() {
+    public void printPlayAreaDominos() {
+
+    }
+
+    @Override
+    public int getPlayNumDominos() {
+        return 0;
+    }
+
+    @Override
+    public DominoGUI getFirstPlayDomino() {
         return null;
+    }
+
+    @Override
+    public void addShift() {
+
+    }
+
+    @Override
+    public void removeShift() {
+
     }
 
     @Override

@@ -19,12 +19,12 @@ import javafx.stage.Stage;
 public class MainGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BoneyardGUI<DominoGUI> boneyard = new BoneyardGUI<>();
-        HumanPlayerGUI<DominoGUI> humanPlayer = new HumanPlayerGUI<>(boneyard);
-        ComputerPlayerGUI<DominoGUI> computerPlayer =
-                new ComputerPlayerGUI<>(boneyard);
+        BoneyardGUI boneyard = new BoneyardGUI();
+        HumanPlayerGUI humanPlayer = new HumanPlayerGUI(boneyard);
+        ComputerPlayerGUI computerPlayer =
+                new ComputerPlayerGUI(boneyard);
 
-        PlayAreaGUI<DominoGUI> playArea = new PlayAreaGUI<>(boneyard,
+        PlayAreaGUI playArea = new PlayAreaGUI(boneyard,
                 humanPlayer, computerPlayer);
 
         //FIXME: Hand object

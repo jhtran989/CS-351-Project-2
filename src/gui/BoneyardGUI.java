@@ -1,19 +1,19 @@
 package gui;
 
-import console.gamePieces.Boneyard;
-import console.gamePieces.Domino;
+import basePieces.BoneyardBase;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class BoneyardGUI<DominoType extends Domino> extends Boneyard<DominoType> {
+public class BoneyardGUI extends BoneyardBase<DominoGUI> {
     public BoneyardGUI() {
-        dominoBoneyard = (List<DominoType>) DominoGUI.setUpBoneyardGUI();
-        random = ThreadLocalRandom.current();
+        super();
+
+        dominoBoneyard = DominoGUI.setUpBoneyardGUI();
     }
 
     @Override
-    public List<DominoType> giveInitialHand() {
+    public List<DominoGUI> giveInitialHand() {
         return super.giveInitialHand();
     }
 }

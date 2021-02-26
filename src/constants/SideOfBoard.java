@@ -1,7 +1,4 @@
-package console.constants;
-
-import java.util.Arrays;
-import java.util.List;
+package constants;
 
 public enum SideOfBoard {
     LEFT(0),

@@ -1,22 +1,25 @@
 package gui;
 
-import console.gamePieces.Boneyard;
-import console.gamePieces.Domino;
-import console.gamePieces.PlayArea;
-import console.players.Player;
+import basePieces.BoneyardBase;
+import basePieces.PlayAreaBase;
+import basePieces.Player;
+import gui.players.HumanPlayerGUI;
 
-public class PlayAreaGUI<DominoType extends Domino>
-        extends PlayArea<DominoType> {
-    public PlayAreaGUI(Boneyard<DominoType> boneyard, Player<DominoType> humanPlayer,
-                       Player<DominoType> computerPlayer) {
+public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
+    public PlayAreaGUI(BoneyardBase<DominoGUI> boneyard,
+                       Player<DominoGUI> humanPlayer,
+                       Player<DominoGUI> computerPlayer) {
         super(boneyard, humanPlayer,
                 computerPlayer);
     }
 
     @Override
-    public void startGame() {
-        humanPlayer.setOtherPlayer(computerPlayer);
-        computerPlayer.setOtherPlayer(humanPlayer);
+    protected Player<DominoGUI> getOtherPlayer(Player<DominoGUI> player) {
+        if (player instanceof HumanPlayerGUI) {
+            return humanPlayer;
+        } else {
+            return computerPlayer;
+        }
     }
 
     private void displayPlayArea() {

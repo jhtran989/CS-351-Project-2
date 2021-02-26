@@ -11,6 +11,12 @@ Second note: all the domino images used for the GUI version are courtesy of Hugh
 
 ### Instructions
 
+### Design Change with GUI
+
+Add in generics and created `*Base` classes so some functionality can be shared between the console and GUI versions
+
+I unfortunately wasn't able to rename the console version Class names with `Console` endings to distinguish them from the `*Base` classes mentioned above (that's also why I added the `*Base` endings &mdash; originally wanted the base designs to have plain names and both version incorporate name endings)
+
 ### Afternotes
 
 As always, there might be errors with parsing the input (all the exceptions are not caught), but given the right input, the program should work as intended.

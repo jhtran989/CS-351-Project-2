@@ -1,27 +1,15 @@
 package console.gamePieces;
 
-import console.Main;
+import basePieces.PlayAreaBase;
+import console.MainConsole;
 import console.players.HumanPlayer;
-import console.players.Player;
+import basePieces.Player;
+import console.players.PlayerConsole;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlayArea<DominoType extends Domino> {
-    protected final Boneyard<DominoType> boneyard;
-    protected final Player<DominoType> humanPlayer;
-    protected final Player<DominoType> computerPlayer;
-    List<Player<DominoType>> playerList;
-
-    public PlayArea(Boneyard<DominoType> boneyard, Player<DominoType> humanPlayer,
-                    Player<DominoType> computerPlayer) {
-        this.boneyard = boneyard;
-        this.humanPlayer = humanPlayer;
-        this.computerPlayer = computerPlayer;
-        playerList = new ArrayList<>();
-
-        playerList.add(humanPlayer); // the human player will always go first
-        playerList.add(computerPlayer);
+public class PlayArea extends PlayAreaBase<Domino> {
+    public PlayArea(Boneyard boneyard, PlayerConsole humanPlayer,
+                    PlayerConsole computerPlayer) {
+        super(boneyard, humanPlayer, computerPlayer);
     }
 
     public void startGame() {
@@ -30,12 +18,12 @@ public class PlayArea<DominoType extends Domino> {
         computerPlayer.setOtherPlayer(humanPlayer);
         printPlayArea(humanPlayer);
 
-        Player currentPlayer = null;
+        Player<Domino> currentPlayer = null;
         while (true) {
-            for (Player player : playerList) {
+            for (Player<Domino> player : playerList) {
                 humanPlayer.printTray();
 
-                if (Main.DEBUG) {
+                if (MainConsole.DEBUG) {
                     //FIXME
                     computerPlayer.printTray();
                 }
@@ -62,11 +50,11 @@ public class PlayArea<DominoType extends Domino> {
         initiateEndGame(currentPlayer);
     }
 
-    protected void initiateEndGame(Player lastPlayer) {
-        int humanCount = humanPlayer.getCountDomino();
-        int computerCount = computerPlayer.getCountDomino();
+    protected void initiateEndGame(Player<Domino> lastPlayer) {
+        int humanCount = humanPlayer.getPlayAreaCountDomino();
+        int computerCount = computerPlayer.getPlayAreaCountDomino();
 
-        if (Main.DEBUG) {
+        if (MainConsole.DEBUG) {
             //FIXME
             System.out.println("Human count: " + humanCount);
             System.out.println("Computer count: " + computerCount);
@@ -84,11 +72,11 @@ public class PlayArea<DominoType extends Domino> {
         }
     }
 
-    private void printPlayArea(Player currentPlayer) {
+    private void printPlayArea(Player<Domino> currentPlayer) {
         System.out.println("Boneyard contains " + boneyard.getNumDominos() +
                 " dominos");
 
-        Player otherPlayer = getOtherPlayer(currentPlayer);
+        Player<Domino> otherPlayer = getOtherPlayer(currentPlayer);
 
         if (!otherPlayer.isPlayAreaEmpty()) {
             if (currentPlayer.isShift()) {
@@ -100,28 +88,29 @@ public class PlayArea<DominoType extends Domino> {
             }
         }
 
-        if (Main.DEBUG) {
+        if (MainConsole.DEBUG) {
             //FIXME
             System.out.println("Human shift: " + humanPlayer.isShift());
             System.out.println("Computer shift: " + computerPlayer.isShift());
         }
 
         System.out.println("Play area dominos:");
-        for (Player player : playerList) {
+        for (Player<Domino> player : playerList) {
             player.printPlayAreaDominos();
-        }
-    }
-
-    protected Player getOtherPlayer(Player player) {
-        if (player instanceof HumanPlayer) {
-            return computerPlayer;
-        } else {
-            return humanPlayer;
         }
     }
 
     private void printInitialMessage() {
         System.out.println("Dominos!");
         System.out.println("Computer has " + computerPlayer.getNumDominos());
+    }
+
+    @Override
+    protected Player<Domino> getOtherPlayer(Player<Domino> player) {
+        if (player instanceof HumanPlayer) {
+            return computerPlayer;
+        } else {
+            return humanPlayer;
+        }
     }
 }

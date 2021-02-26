@@ -1,12 +1,50 @@
 package gui.players;
 
-import console.gamePieces.Boneyard;
-import console.gamePieces.Domino;
-import console.players.ComputerPlayer;
+import basePieces.BoneyardBase;
+import gui.DominoGUI;
 
-public class ComputerPlayerGUI<DominoType extends Domino>
-        extends ComputerPlayer<DominoType> {
-    public ComputerPlayerGUI(Boneyard<DominoType> boneyard) {
+public class ComputerPlayerGUI extends PlayerGUI {
+    public ComputerPlayerGUI(BoneyardBase<DominoGUI> boneyard) {
         super(boneyard);
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    protected void setNumsToMatch() {
+
+    }
+
+    @Override
+    public void printPlayAreaDominos() {
+
+    }
+
+    @Override
+    public int getPlayNumDominos() {
+        return 0;
+    }
+
+    @Override
+    public DominoGUI getFirstPlayDomino() {
+        return null;
+    }
+
+    @Override
+    public void addShift() {
+
+    }
+
+    @Override
+    public void removeShift() {
+
+    }
+
+    @Override
+    protected void setSideNumMatchPair() {
+
     }
 }
