@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Boneyard {
-    private List<Domino> dominoBoneyard;
-    private static ThreadLocalRandom random;
-    private final int DOMINO_MAX = 6;
+public class Boneyard<DominoType extends Domino> {
+    protected List<DominoType> dominoBoneyard;
+    protected static ThreadLocalRandom random;
+    protected final int DOMINO_MAX = 6;
 
     public Boneyard() {
-        dominoBoneyard = Domino.setUpBoneyard();
+        dominoBoneyard = (List<DominoType>) Domino.setUpBoneyard();
         random = ThreadLocalRandom.current();
     }
 
-    public List<Domino> giveInitialHand() {
-        List<Domino> initialHand = new ArrayList<>();
+    public List<DominoType> giveInitialHand() {
+        List<DominoType> initialHand = new ArrayList<>();
 
         int dominoIndex;
         for (int i = 0; i <= DOMINO_MAX; i++) {
@@ -32,7 +32,7 @@ public class Boneyard {
      *
      * @return (above)
      */
-    public Domino removeRandomDomino() {
+    public DominoType removeRandomDomino() {
         if (dominoBoneyard.isEmpty()) {
             return null;
         }

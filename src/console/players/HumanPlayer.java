@@ -9,11 +9,11 @@ import utilities.CustomParser;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class HumanPlayer extends Player {
-    private Scanner scanner;
+public class HumanPlayer<DominoType extends Domino> extends Player<DominoType> {
+    private final Scanner scanner;
     private SideOfBoard matchSide;
 
-    public HumanPlayer(Boneyard boneyard) {
+    public HumanPlayer(Boneyard<DominoType> boneyard) {
         super(boneyard);
 
         numsToMatch = new int[1];
@@ -98,18 +98,18 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    protected Domino findDominoInHand() {
+    protected DominoType findDominoInHand() {
         //FIXME
         System.out.println("Find in hand call");
 
         //FIXME
         if (!setupNumsToMatch) {
             System.out.println("Exiting call...");
-            return Domino.HALF_BLANK; // just some output that is NOT null so
+            return (DominoType) Domino.HALF_BLANK; // just some output that is NOT null so
             // canPlayDomino is still true (only to circumvent the first turn)
         }
 
-        Domino dominoMatch = null;
+        DominoType dominoMatch = null;
         for (int toMatch : numsToMatch) {
             dominoMatch = hand.searchDomino(toMatch);
 
@@ -133,7 +133,7 @@ public class HumanPlayer extends Player {
     }
 
     private void playDomino() throws PlayDominoException {
-        Domino matchDomino = findDominoInHand();
+        DominoType matchDomino = findDominoInHand();
         if (matchDomino == null) {
             canPlayDomino = false;
             throw new PlayDominoException();
@@ -208,7 +208,7 @@ public class HumanPlayer extends Player {
     }
 
     private boolean drawDomino() throws DrawDominoException {
-        Domino matchDomino = findDominoInHand();
+        DominoType matchDomino = findDominoInHand();
         if (matchDomino != null) {
             canDrawDomino = false;
             throw new DrawDominoException();
@@ -218,7 +218,7 @@ public class HumanPlayer extends Player {
 
         System.out.println("Drawing a random domino from the boneyard...");
 
-        Domino domino = hand.drawDomino();
+        DominoType domino = hand.drawDomino();
         if (domino == null) {
             System.out.println("Out of dominos...");
             return false;

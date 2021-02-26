@@ -8,8 +8,8 @@ import console.gamePieces.Domino;
 import java.util.Arrays;
 import java.util.Map;
 
-public class ComputerPlayer extends Player {
-    public ComputerPlayer(Boneyard boneyard) {
+public class ComputerPlayer<DominoType extends Domino> extends Player<DominoType> {
+    public ComputerPlayer(Boneyard<DominoType> boneyard) {
         super(boneyard);
 
         numsToMatch = new int[2];

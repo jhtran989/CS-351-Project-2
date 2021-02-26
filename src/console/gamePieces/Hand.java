@@ -7,19 +7,23 @@ import exceptions.DominoOutOfBoundsException;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Hand {
-    private Boneyard boneyard;
-    private List<Domino> hand;
-    private static ThreadLocalRandom random;
+public class Hand<DominoType extends Domino> {
+    protected final Boneyard<DominoType> boneyard;
+    protected final List<DominoType> hand;
+    protected static ThreadLocalRandom random;
 
-    public Hand(Boneyard boneyard) {
+    public Hand(Boneyard<DominoType> boneyard) {
         this.boneyard = boneyard;
         hand = boneyard.giveInitialHand();
         random = ThreadLocalRandom.current();
     }
 
-    public Domino drawDomino() {
-        Domino domino = boneyard.removeRandomDomino();
+    public List<DominoType> getHand() {
+        return hand;
+    }
+
+    public DominoType drawDomino() {
+        DominoType domino = boneyard.removeRandomDomino();
 
         if (domino != null) {
             hand.add(domino);
@@ -28,7 +32,7 @@ public class Hand {
         return domino;
     }
 
-    public Domino playDomino(int index) {
+    public DominoType playDomino(int index) {
         return hand.remove(index);
     }
 
@@ -40,9 +44,9 @@ public class Hand {
      *
      * @return the removed domino
      */
-    public Domino playDomino(Domino domino) {
+    public DominoType playDomino(Domino domino) {
         hand.remove(domino);
-        return domino;
+        return (DominoType) domino;
     }
 
     public void checkDominoBounds(int index) throws DominoOutOfBoundsException {
@@ -111,7 +115,7 @@ public class Hand {
      * @return true if there is a domino in the hand that has the
      * dominoValue; false otherwise
      */
-    public Domino searchDomino(int dominoValue) {
+    public DominoType searchDomino(int dominoValue) {
         int dominoIndex = 0;
         for (Domino domino : hand) {
             if (dominoValue == domino.getLeftSide()
@@ -120,7 +124,7 @@ public class Hand {
                     System.out.println("Index: " + dominoIndex);
                 }
 
-                return domino;
+                return (DominoType) domino;
             }
 
             dominoIndex++;

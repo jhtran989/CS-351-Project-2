@@ -7,14 +7,14 @@ import console.players.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayArea {
-    private Boneyard boneyard;
-    private Player humanPlayer;
-    private Player computerPlayer;
-    List<Player> playerList;
+public class PlayArea<DominoType extends Domino> {
+    protected final Boneyard<DominoType> boneyard;
+    protected final Player<DominoType> humanPlayer;
+    protected final Player<DominoType> computerPlayer;
+    List<Player<DominoType>> playerList;
 
-    public PlayArea(Boneyard boneyard, Player humanPlayer,
-                    Player computerPlayer) {
+    public PlayArea(Boneyard<DominoType> boneyard, Player<DominoType> humanPlayer,
+                    Player<DominoType> computerPlayer) {
         this.boneyard = boneyard;
         this.humanPlayer = humanPlayer;
         this.computerPlayer = computerPlayer;
@@ -62,7 +62,7 @@ public class PlayArea {
         initiateEndGame(currentPlayer);
     }
 
-    private void initiateEndGame(Player lastPlayer) {
+    protected void initiateEndGame(Player lastPlayer) {
         int humanCount = humanPlayer.getCountDomino();
         int computerCount = computerPlayer.getCountDomino();
 
@@ -112,7 +112,7 @@ public class PlayArea {
         }
     }
 
-    private Player getOtherPlayer(Player player) {
+    protected Player getOtherPlayer(Player player) {
         if (player instanceof HumanPlayer) {
             return computerPlayer;
         } else {

@@ -5,6 +5,10 @@
 
 ### Introduction
 
+Note: two late day extensions will most likely be used for this project
+
+Second note: all the domino images used for the GUI version are courtesy of Hugh McFall (we thank him for letting us use his domino images)
+
 ### Instructions
 
 ### Afternotes

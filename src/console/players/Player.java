@@ -10,20 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class Player {
-    protected Hand hand;
-    protected List<Domino> playAreaDominos;
+public abstract class Player<DominoType extends Domino> {
+    protected Hand<DominoType> hand;
+    protected List<DominoType> playAreaDominos;
     protected boolean shift;
     protected boolean takeTurn;
     protected int[] numsToMatch;
-    protected Player otherPlayer;
+    protected Player<DominoType> otherPlayer;
     protected boolean setupNumsToMatch;
     protected boolean canPlayDomino;
     protected boolean canDrawDomino;
     protected Map<SideOfBoard, Integer> sideNumMatchPair;
 
-    public Player(Boneyard boneyard) {
-        hand = new Hand(boneyard);
+    public Player(Boneyard<DominoType> boneyard) {
+        hand = new Hand<>(boneyard);
         playAreaDominos = new ArrayList<>();
         shift = false;
         takeTurn = true;
@@ -41,6 +41,16 @@ public abstract class Player {
     public abstract String getName();
     protected abstract void setNumsToMatch();
     protected abstract Domino findDominoInHand();
+
+    //FIXME: getting the list directly...
+    public List<DominoType> getHandList() {
+        return hand.getHand();
+    }
+
+    //FIXME: getting the list directly...
+    public List<DominoType> getPlayAreaDominos() {
+        return playAreaDominos;
+    }
 
     public boolean isShift() {
         return shift;
@@ -74,7 +84,7 @@ public abstract class Player {
         return playAreaDominos.size();
     }
 
-    public Domino getFirstPlayDomino() {
+    public DominoType getFirstPlayDomino() {
         if (playAreaDominos.contains(Domino.HALF_BLANK)) {
             return playAreaDominos.get(1);
         }
@@ -82,7 +92,7 @@ public abstract class Player {
         return playAreaDominos.get(0);
     }
 
-    public Domino getLastPlayDomino() {
+    public DominoType getLastPlayDomino() {
         return playAreaDominos.get(playAreaDominos.size() - 1);
     }
 
@@ -98,15 +108,15 @@ public abstract class Player {
     public void playDominoInPlayArea(Domino domino, SideOfBoard matchSide) {
         if (matchSide == SideOfBoard.LEFT) {
             playAreaDominos.add(0,
-                    hand.playDomino(domino));
+                    (DominoType) hand.playDomino(domino));
         } else {
-            playAreaDominos.add(hand.playDomino(domino));
+            playAreaDominos.add((DominoType) hand.playDomino(domino));
         }
     }
 
     public void addShift() {
         if (!playAreaDominos.contains(Domino.HALF_BLANK)) {
-            playAreaDominos.add(0, Domino.HALF_BLANK);
+            playAreaDominos.add(0, (DominoType) Domino.HALF_BLANK);
         }
 
         shift = true;
@@ -125,7 +135,7 @@ public abstract class Player {
         System.out.println(hand);
     }
 
-    public void setOtherPlayer(Player otherPlayer) {
+    public void setOtherPlayer(Player<DominoType> otherPlayer) {
         this.otherPlayer = otherPlayer;
     }
 
