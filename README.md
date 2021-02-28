@@ -19,7 +19,11 @@ For the GUI, just click on one of the dominos and press the play button on the r
 
 The `.jar` files are configured with the debug messages ON. I might have left some vital checking inside the debug parts, so I didn't want to break the program by turning them off (and lack of time to comb through and edit the debug messages).
 
-
+The `.jar` files are found at the root and can be run with the usual
+```
+`java -jar JAR_NAME`
+```
+where `JAR_NAME` is the name of the jar file. The `.jar` for the console is `dominosConsole.jar` and the one for the GUI is `dominosGUI.jar`.
 
 ### doc Note
 
