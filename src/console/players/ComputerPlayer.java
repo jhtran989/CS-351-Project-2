@@ -11,17 +11,6 @@ import java.util.Map;
 public class ComputerPlayer extends PlayerConsole {
     public ComputerPlayer(Boneyard boneyard) {
         super(boneyard);
-
-        numsToMatch = new int[2];
-    }
-
-    @Override
-    protected Domino findDominoInHand(boolean autoRotate) {
-        if (handDEBUG()) {
-            return Domino.HALF_BLANK;
-        }
-
-        return super.findDominoInHand(autoRotate);
     }
 
     @Override
@@ -31,7 +20,8 @@ public class ComputerPlayer extends PlayerConsole {
         Domino dominoMatch = findDominoInHand(true);
         if (dominoMatch == null) {
             if (!drawSequence()) {
-                System.out.println("Out of dominos...");
+                System.out.println("Out of moves...");
+                System.out.println("The Computer player ended its turn...");
                 takeTurn = false;
                 return;
             }
@@ -48,78 +38,6 @@ public class ComputerPlayer extends PlayerConsole {
         return "Computer";
     }
 
-    @Override
-    protected void setNumsToMatch() {
-        if (!otherPlayer.isPlayAreaEmpty()) {
-            setupNumsToMatch = true;
-
-            if (otherPlayer.getPlayNumDominos() == 1) {
-                Domino singleDomino = otherPlayer.getFirstPlayDomino();
-                numsToMatch[0] = singleDomino.getLeftSide();
-                numsToMatch[1] = singleDomino.getRightSide();
-            } else {
-                Domino firstDomino = otherPlayer.getFirstPlayDomino();
-                Domino lastDomino = otherPlayer.getLastPlayDomino();
-                numsToMatch[0] = firstDomino.getLeftSide();
-                numsToMatch[1] = lastDomino.getRightSide();
-            }
-
-            if (MainConsole.DEBUG) {
-                //FIXME
-                System.out.println("Nums to match: " + Arrays.toString(
-                        numsToMatch));
-            }
-        } else { // should not occur since the end game should end, but just in
-            // case...
-            setupNumsToMatch = false;
-        }
-    }
-
-//    @Override
-//    protected Domino findDominoInHand() {
-//        if (MainConsole.DEBUG) {
-//            //FIXME
-//            System.out.println("Find in hand call");
-//
-//            //FIXME
-//            if (!setupNumsToMatch) {
-//                System.out.println("Exiting call...");
-//                return Domino.HALF_BLANK; // just some output that is NOT null so
-//                // canPlayDomino is still true (only to circumvent the first turn)
-//            }
-//        }
-//
-//        Domino dominoMatch = null; // default value
-//        for (Map.Entry<SideOfBoard, Integer> sideNumMatchEntry :
-//                sideNumMatchPair.entrySet()) {
-//            dominoMatch = hand.searchDominoAutoRotate(
-//                    sideNumMatchEntry.getValue(),
-//                            sideNumMatchEntry.getKey());
-//
-//            if (dominoMatch != null) {
-//                if (MainConsole.DEBUG) {
-//                    //FIXME
-//                    System.out.println("Num to match: "
-//                            + sideNumMatchEntry.getValue());
-//                    System.out.println("Side: " + sideNumMatchEntry.getKey());
-//                }
-//
-//                break;
-//            }
-//        }
-//
-//        if (MainConsole.DEBUG) {
-//            //FIXME
-//            if (dominoMatch != null) {
-//                System.out.println("Domino match " + dominoMatch);
-//            } else {
-//                System.out.println("No match");
-//            }
-//        }
-//
-//        return dominoMatch;
-//    }
-
     /**
      * Checks if the Domino given in the parameter matches one of the two end
      * dominos of the human player; if so, return 0 for a left domino match,
@@ -135,7 +53,6 @@ public class ComputerPlayer extends PlayerConsole {
         }
 
         SideOfBoard matchSide = null;
-//        int matchIndex = 0;
         for (Map.Entry<SideOfBoard, Integer> sideNumEntry :
                 sideNumMatchPair.entrySet()) {
             matchSide = hand.setDominoOrientation(
@@ -146,17 +63,6 @@ public class ComputerPlayer extends PlayerConsole {
                 break;
             }
         }
-
-//        for (int toMatch : numsToMatch) {
-//            match = hand.setDominoOrientation(toMatch,
-//                    domino, sideOfBoard);
-//
-//            if (match != -1) {
-//                break;
-//            }
-//
-//            matchIndex++;
-//        }
 
         if (MainConsole.DEBUG) {
             //FIXME
@@ -172,7 +78,7 @@ public class ComputerPlayer extends PlayerConsole {
         Domino newDomino = hand.drawDomino();
         System.out.println("The computer drew " + newDomino);
 
-        SideOfBoard matchSide; // can only be -1, 0, or 1
+        SideOfBoard matchSide;
         while (newDomino != null) {
             matchSide = checkDominoMatch(newDomino);
 
@@ -211,24 +117,6 @@ public class ComputerPlayer extends PlayerConsole {
     public void printTray() {
         System.out.print("Computer's ");
         super.printTray();
-    }
-
-    @Override
-    protected void setSideNumMatchPair() {
-        sideNumMatchPair.clear();
-
-        if (!otherPlayer.isPlayAreaEmpty()) {
-            SideOfBoard[] sidesArray = SideOfBoard.values();
-
-            if (MainConsole.DEBUG) {
-                System.out.println("Side array: "
-                        + Arrays.toString(sidesArray));
-            }
-
-            for (int i = 0; i < numsToMatch.length; i++) {
-                sideNumMatchPair.put(sidesArray[i], numsToMatch[i]);
-            }
-        }
     }
 
     @Override

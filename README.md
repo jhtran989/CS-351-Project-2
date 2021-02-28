@@ -19,6 +19,8 @@ I unfortunately wasn't able to rename the console version Class names with `Cons
 
 ### Afternotes
 
+#### Console Version
+
 As always, there might be errors with parsing the input (all the exceptions are not caught), but given the right input, the program should work as intended.
 
 Any `List` structures used will be implemented as an `ArrayList`.
@@ -61,3 +63,7 @@ The conditional
 if (playAreaDominos.contains(Domino.HALF_BLANK))
 ```
 is implemented a good bit throughout the project to make sure `HALF_BLANK` doesn't mess things up (since it's coded as an actual `Domino` object), and it might have been better to just incorporate it when printing the play area...
+
+#### GUI version
+
+The combo boxes are set to an initial value so I don't have to handle the case where the user forgot to choose an option before playing a domino

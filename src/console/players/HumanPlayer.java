@@ -1,5 +1,6 @@
 package console.players;
 
+import console.MainConsole;
 import constants.SideOfBoard;
 import console.gamePieces.Boneyard;
 import console.gamePieces.Domino;
@@ -11,22 +12,11 @@ import java.util.Scanner;
 
 public class HumanPlayer extends PlayerConsole {
     private final Scanner scanner;
-    private SideOfBoard matchSide;
 
     public HumanPlayer(Boneyard boneyard) {
         super(boneyard);
 
-        numsToMatch = new int[1];
         scanner = new Scanner(System.in);
-    }
-
-    @Override
-    protected Domino findDominoInHand(boolean autoRotate) {
-        if (handDEBUG()) {
-            return Domino.HALF_BLANK;
-        }
-
-        return super.findDominoInHand(autoRotate);
     }
 
     @Override
@@ -39,6 +29,14 @@ public class HumanPlayer extends PlayerConsole {
         System.out.println("[d] Draw from boneyard");
         System.out.println("[q] Quit");
 
+        if (MainConsole.DEBUG) {
+            System.out.println("Can play domino: " + canPlayDomino);
+            System.out.println("Can draw domino: " + canDrawDomino);
+        }
+
+        // Condition satisfied only when the player selects to play a domino
+        // and draw from the boneyard to update the boolean values at least
+        // once each
         if (!(canPlayDomino || canDrawDomino)) {
             System.out.println("Note: You have no valid moves. Please end " +
                     "your turn by quitting [q]");
@@ -79,67 +77,6 @@ public class HumanPlayer extends PlayerConsole {
     public String getName() {
         return "Human";
     }
-
-    /**
-     * The Human player only has one move (besides the first turn) during the
-     * course of the game -- there will only be one domino on the
-     * ComputerPlayer's playing area to extend from
-     */
-    @Override
-    protected void setNumsToMatch() {
-        if (!otherPlayer.isPlayAreaEmpty()) {
-            setupNumsToMatch = true;
-
-            if (isShift()) { // extend to the left
-                numsToMatch[0] = otherPlayer.getFirstPlayDomino().getLeftSide();
-                matchSide = SideOfBoard.LEFT;
-            } else { // extend to the right
-                numsToMatch[0] = otherPlayer.getLastPlayDomino().getRightSide();
-                matchSide = SideOfBoard.RIGHT;
-            }
-
-            //FIXME
-            System.out.println("Nums to match: " + Arrays.toString(numsToMatch));
-        } else { // should not occur since the end game should end, but just in
-            // case...
-            setupNumsToMatch = false;
-        }
-    }
-
-//    @Override
-//    protected Domino findDominoInHand() {
-//        //FIXME
-//        System.out.println("Find in hand call");
-//
-//        //FIXME
-//        if (!setupNumsToMatch) {
-//            System.out.println("Exiting call...");
-//            return Domino.HALF_BLANK; // just some output that is NOT null so
-//            // canPlayDomino is still true (only to circumvent the first turn)
-//        }
-//
-//        Domino dominoMatch = null;
-//        for (int toMatch : numsToMatch) {
-//            dominoMatch = hand.searchDomino(toMatch);
-//
-//            if (dominoMatch != null) {
-//                //FIXME
-//                System.out.println("Num to match: " + toMatch);
-//                System.out.println("Side: " + matchSide);
-//
-//                break;
-//            }
-//        }
-//
-//        //FIXME
-//        if (dominoMatch != null) {
-//            System.out.println("Domino match " + dominoMatch);
-//        } else {
-//            System.out.println("No match");
-//        }
-//
-//        return dominoMatch;
-//    }
 
     private void playDomino() throws PlayDominoException {
         Domino matchDomino = findDominoInHand(false);
@@ -183,7 +120,7 @@ public class HumanPlayer extends PlayerConsole {
                 System.out.println("left");
 
                 if (setupNumsToMatch) {
-                    if (domino.getRightSide() != numsToMatch[0]) {
+                    if (domino.getRightSide() != numsToMatch.get(0)) {
                         throw new DominoMismatchException();
                     }
                 }
@@ -198,7 +135,7 @@ public class HumanPlayer extends PlayerConsole {
                 System.out.println("right");
 
                 if (setupNumsToMatch) {
-                    if (domino.getLeftSide() != numsToMatch[0]) {
+                    if (domino.getLeftSide() != numsToMatch.get(0)) {
                         throw new DominoMismatchException();
                     }
                 }
@@ -232,6 +169,7 @@ public class HumanPlayer extends PlayerConsole {
         Domino domino = hand.drawDomino();
         if (domino == null) {
             System.out.println("Out of dominos...");
+            canDrawDomino = false;
             return false;
         }
 
@@ -243,15 +181,6 @@ public class HumanPlayer extends PlayerConsole {
     public void printTray() {
         System.out.print("Human's ");
         super.printTray();
-    }
-
-    @Override
-    protected void setSideNumMatchPair() {
-        sideNumMatchPair.clear();
-
-        if (!otherPlayer.isPlayAreaEmpty()) {
-            sideNumMatchPair.put(matchSide, numsToMatch[0]);
-        }
     }
 
     @Override

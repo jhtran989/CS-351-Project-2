@@ -64,11 +64,11 @@ public class PlayArea extends PlayAreaBase<Domino> {
             System.out.println("Since both players have the same count, the "
                     + lastPlayer.getName() + " won the game!");
         } else if (humanCount < computerCount) {
-            System.out.println("The " + humanPlayer.getName() + " won the " +
-                    "game!");
+            System.out.println("The " + humanPlayer.getName() + " player won " +
+                    "the game!");
         } else {
-            System.out.println("The " + computerPlayer.getName() + " won the " +
-                    "game!");
+            System.out.println("The " + computerPlayer.getName() + " player " +
+                    "won the game!");
         }
     }
 
@@ -78,7 +78,8 @@ public class PlayArea extends PlayAreaBase<Domino> {
 
         Player<Domino> otherPlayer = getOtherPlayer(currentPlayer);
 
-        if (!otherPlayer.isPlayAreaEmpty()) {
+        if (!(currentPlayer.isPlayAreaEmpty() &&
+                otherPlayer.isPlayAreaEmpty())) {
             if (currentPlayer.isShift()) {
                 currentPlayer.addShift();
                 otherPlayer.removeShift();
@@ -87,6 +88,16 @@ public class PlayArea extends PlayAreaBase<Domino> {
                 currentPlayer.removeShift();
             }
         }
+
+//        if (!otherPlayer.isPlayAreaEmpty()) {
+//            if (currentPlayer.isShift()) {
+//                currentPlayer.addShift();
+//                otherPlayer.removeShift();
+//            } else {
+//                otherPlayer.addShift();
+//                currentPlayer.removeShift();
+//            }
+//        }
 
         if (MainConsole.DEBUG) {
             //FIXME

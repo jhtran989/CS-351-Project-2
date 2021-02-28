@@ -22,6 +22,12 @@ public class Domino {
     }
 
     /**
+     * Only used to get an instance of Domino (and any subclass of Domino)
+     */
+    public Domino() {
+    }
+
+    /**
      * Creates a deep clone of the domino using a constructor (just sets the
      * left and right values to the same values as the domino given)
      *

@@ -15,16 +15,16 @@ public abstract class PlayerConsole extends Player<Domino> {
     }
 
     @Override
-    public void printPlayAreaDominos() {
-        for (Domino playAreaDomino : playAreaDominos) {
-            System.out.print(playAreaDomino);
+    protected Domino findDominoInHand(boolean autoRotate) {
+        if (handDEBUG()) {
+            return new Domino();
         }
 
-        System.out.println();
+        return super.findDominoInHand(autoRotate);
     }
 
     @Override
-    public int getPlayNumDominos() {
+    public int getPlayAreaNumDominos() {
         if (playAreaDominos.contains(Domino.HALF_BLANK)) {
             return playAreaDominos.size() - 1;
         }

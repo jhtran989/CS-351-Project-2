@@ -4,6 +4,7 @@ import console.MainConsole;
 import console.gamePieces.Domino;
 import constants.SideOfBoard;
 import exceptions.DominoOutOfBoundsException;
+import gui.gamePieces.DominoGUI;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,6 +29,8 @@ public class HandBase<DominoType extends Domino> {
 
         if (domino != null) {
             hand.add(domino);
+        } else {
+            System.out.println("The boneyard is out of dominos...");
         }
 
         return domino;
@@ -79,22 +82,32 @@ public class HandBase<DominoType extends Domino> {
             if (dominoValue == domino.getLeftSide()) {
                 if (matchSide == SideOfBoard.LEFT) {
                     if (Main.DEBUG) {
+                        System.out.println("Rotation needed");
                         System.out.println("Domino (before rotate): "
                                 + domino + " at index " + dominoIndex);
                     }
 
                     domino.rotateDomino();
+                } else {
+                    if (Main.DEBUG) {
+                        System.out.println("No rotation needed - initial");
+                    }
                 }
 
                 return domino;
             } else if (dominoValue == domino.getRightSide()) {
                 if (matchSide == SideOfBoard.RIGHT) {
                     if (Main.DEBUG) {
+                        System.out.println("Rotation needed");
                         System.out.println("Domino (before rotate): "
                                 + domino + " at index " + dominoIndex);
                     }
 
                     domino.rotateDomino();
+                } else {
+                    if (Main.DEBUG) {
+                        System.out.println("No rotation needed - initial");
+                    }
                 }
 
                 return domino;
@@ -139,35 +152,37 @@ public class HandBase<DominoType extends Domino> {
         if (dominoValue == domino.getLeftSide()) {
             if (matchSide == SideOfBoard.LEFT) {
                 if (Main.DEBUG) {
+                    System.out.println("Play at left");
+
+                    System.out.println("Rotation needed");
                     System.out.println("Before rotating: " + domino);
                     System.out.println("Rotating...");
                     domino.rotateDomino();
                     System.out.println("After rotating: " + domino);
                     domino.rotateDomino();
-
-                    System.out.println("Play at left");
                 }
             } else {
                 if (Main.DEBUG) {
-                    System.out.println("No rotation needed");
                     System.out.println("Play at right");
+                    System.out.println("No rotation needed");
                 }
             }
         } else if (dominoValue == domino.getRightSide()) {
             if (matchSide == SideOfBoard.RIGHT) {
                 if (Main.DEBUG) {
+                    System.out.println("Play at right");
+
+                    System.out.println("Rotation needed");
                     System.out.println("Before rotating: " + domino);
                     System.out.println("Rotating...");
                     domino.rotateDomino();
                     System.out.println("After rotating: " + domino);
                     domino.rotateDomino();
-
-                    System.out.println("Play at right");
                 }
             } else {
                 if (Main.DEBUG) {
-                    System.out.println("No rotation needed");
                     System.out.println("Play at left");
+                    System.out.println("No rotation needed");
                 }
             }
         }
@@ -210,8 +225,26 @@ public class HandBase<DominoType extends Domino> {
         return hand.get(index);
     }
 
+    public int getIndex(DominoType dominoGUI) {
+        return hand.indexOf(dominoGUI);
+    }
+
     @Override
     public String toString() {
-        return "HandBase{}";
+        String tray = "Tray: [";
+
+        boolean start = true;
+        for (Domino domino : hand) {
+            if (!start) {
+                tray += ", ";
+            } else {
+                start = false;
+            }
+
+            tray += domino;
+        }
+
+        tray += "]";
+        return tray;
     }
 }

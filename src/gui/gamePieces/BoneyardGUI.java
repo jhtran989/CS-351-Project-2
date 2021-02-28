@@ -1,9 +1,8 @@
-package gui;
+package gui.gamePieces;
 
 import basePieces.BoneyardBase;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class BoneyardGUI extends BoneyardBase<DominoGUI> {
     public BoneyardGUI() {
@@ -13,7 +12,7 @@ public class BoneyardGUI extends BoneyardBase<DominoGUI> {
     }
 
     @Override
-    public List<DominoGUI> giveInitialHand() {
-        return super.giveInitialHand();
+    public String toString() {
+        return "Boneyard contains " + dominoBoneyard.size() + " dominos";
     }
 }
