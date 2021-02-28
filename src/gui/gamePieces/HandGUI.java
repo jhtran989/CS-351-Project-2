@@ -2,6 +2,7 @@ package gui.gamePieces;
 
 import basePieces.HandBase;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
@@ -14,6 +15,7 @@ public class HandGUI extends HandBase<DominoGUI> {
     protected DominoGUI currentDominoClick;
     protected int currentDominoClickIndex;
     protected CustomLabel dominoSelectedLabel;
+    protected Label boneyardLabel;
     protected EventHandler<MouseEvent> currentDominoClickEventSetup;
     protected EventHandler<MouseEvent> currentDominoClickEventDraw;
 
@@ -26,8 +28,9 @@ public class HandGUI extends HandBase<DominoGUI> {
         setMouseClickListenerInHand();
     }
 
-    public void setDominoSelectedLabel(GuiStuff guiStuff) {
+    public void setLabels(GuiStuff guiStuff) {
         dominoSelectedLabel = guiStuff.getDominoSelectedLabel();
+        boneyardLabel = guiStuff.getBoneyardLabel();
     }
 
     //TODO: should be set initially
@@ -152,5 +155,7 @@ public class HandGUI extends HandBase<DominoGUI> {
         handImageList.add(dominoGUI.getDominoImage());
         handDominoImageMap.put(dominoGUI, dominoGUI.getDominoImage());
         addMouseClickListenerInHand(dominoGUI);
+
+        boneyardLabel.setText(boneyard.toString());
     }
 }

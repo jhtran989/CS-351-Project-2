@@ -5,11 +5,27 @@
 
 ### Introduction
 
-Note: two late day extensions will most likely be used for this project
+A game of dominos that contains two versions: the console version and the GUI version. This game involves a human player playing against the computer (preset algorithm &mdash; chooses the first valid move it can make). The players take turns setting a domino in the play area (parallel on separate "lanes") where the dominos placed by each player is displaced by half a domino and the half domino part that the two dominos touch should match in value. As explained in the project spec, the game ends when the boneyard is empty and either one of the players no longer has dominos in their hand or both could not take a turn (i.e. boneyard is empty so that they can't draw another domino into their hand from the boneyard).
+
+Note: two late day extensions will most likely be used for this project (might be a few minutes after the deadline, but I do hope that it won't be too much of a stretch to count as late for 3 days, though late as it is)
 
 Second note: all the domino images used for the GUI version are courtesy of Hugh McFall (we thank him for letting us use his domino images)
 
+Third note: some of the comments provided were a little rushed, but should document the majority of the things needed to understand the project
+
 ### Instructions
+
+For the GUI, just click on one of the dominos and press the play button on the right side of the pane to play the domino (there will be a `Label` that will display the currently selected domino on the left side of the pane).
+
+### doc Note
+
+Given time constraints, there wasn't enough time to produce a document detailing the objects mentioned in the design. However, I hope the information provided here and in the code itself should make the usage and implementation of the objects apparent.
+
+### Rushed Comments in the Code
+
+Again, given the time constraints, many of the comments were a little rushed and only the public methods were commented. Further, if there were some methods that were overridden, only the topmost super class will have a comment (generally speaking, but the only difference should be implementation and the design document should help clarify the differences between the two versions). If not, then the document to the class should contain some details...
+
+Also, any get and set methods are generally inferable, so they won't be commented (including simple methods, like drawing a domino). The exceptions are also an exception (no pun intended) since the exception itself can be inferred from the class name.
 
 ### Design Change with GUI
 
@@ -17,7 +33,21 @@ Add in generics and created `*Base` classes so some functionality can be shared 
 
 I unfortunately wasn't able to rename the console version Class names with `Console` endings to distinguish them from the `*Base` classes mentioned above (that's also why I added the `*Base` endings &mdash; originally wanted the base designs to have plain names and both version incorporate name endings)
 
+### Known Bugs
+
+The `Label` that displays the current domino selected by the user doesn't update to a new (and valid domino currently in the hand &mdash; at this point, it displays the last domino played and can lead to the program crashing if the user doesn't select a new domino to play for the next turn).
+
+Also, I haven't thoroughly tested the end game (if only we had more time...), so there most likely are still some bugs towards the end game.
+
+Update1: I have confirmed a situation towards the end of the game where if one of the players has more dominos in their play area than the other player, the shift won't be implemented correctly (the dominos will still match, but it won't be displayed correctly &mdash; the shift will be applied to the wrong player).
+
 ### Afternotes
+
+Both versions used a `DEBUG` global variable in the respective scope of the main method (the `*Base` classes had their own main that served primarily for debugging and a separate `DEBUG`). Just set the `DEBUG` global variable to false in each of the three main methods (one for the `Base` classes, one for the console version, and one for the GUI version &mdash; should be found at the root of their respective directories).
+
+There were some `Map` objects that were created, but I think one of them wasn't used.
+
+Also, there are some inconsistencies with references to methods and method calls (i.e. call a get method when access to the variable itself is within scope).
 
 #### Console Version
 
@@ -51,9 +81,7 @@ also, different implementations of the methods (abstract) in `Player` class
 
 implemented later on (not utilized in every place that it should)
 
-`Domino` constructor (used for a deep clone):
-
-not used
+`Domino` constructor (used for a deep clone): not used
 
 *Special problem created with `HALF_BLANK`:
 
@@ -66,4 +94,6 @@ is implemented a good bit throughout the project to make sure `HALF_BLANK` doesn
 
 #### GUI version
 
-The combo boxes are set to an initial value so I don't have to handle the case where the user forgot to choose an option before playing a domino
+The combo boxes are set to an initial value so I don't have to handle the case where the user forgot to choose an option before playing a domino.
+
+The implementation of the human and computer players in the GUI version used a good chunk of the same logic as the console version. However, due to time constraints, I wasn't able to properly move them up to the parent class, or even created a better design with maybe human and computer abstract classes instead of the single `PlayerBase` abstract class where both players share implementation from. So, a lot of the code is just copy and paste from the console version (however, there were specific variables that had to be moved around and changed a little to accommodate the GUI elements &mdash; i.e. updating the various `Label` objects).

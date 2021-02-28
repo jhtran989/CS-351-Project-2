@@ -6,12 +6,22 @@ import console.players.HumanPlayer;
 import basePieces.Player;
 import console.players.PlayerConsole;
 
+/**
+ * The Play area for the console version. Has the main game "phases" and
+ * interacts with all the main game pieces. Contains the boneyard and the two
+ * players in the game. In this version, the play area does most of the
+ * communication and weaves the general game logic together
+ */
 public class PlayArea extends PlayAreaBase<Domino> {
     public PlayArea(Boneyard boneyard, PlayerConsole humanPlayer,
                     PlayerConsole computerPlayer) {
         super(boneyard, humanPlayer, computerPlayer);
     }
 
+    /**
+     * The main game "method" that has the players taking turns and checking
+     * if the end game has been reached
+     */
     public void startGame() {
         printInitialMessage();
         humanPlayer.setOtherPlayer(computerPlayer);
@@ -50,6 +60,12 @@ public class PlayArea extends PlayAreaBase<Domino> {
         initiateEndGame(currentPlayer);
     }
 
+    /**
+     * Prints out which player won (the lesser count wins, or if the count is
+     * the same, then the player that last played the domino)
+     *
+     * @param lastPlayer player that last played a domino
+     */
     protected void initiateEndGame(Player<Domino> lastPlayer) {
         int humanCount = humanPlayer.getPlayAreaCountDomino();
         int computerCount = computerPlayer.getPlayAreaCountDomino();
@@ -88,16 +104,6 @@ public class PlayArea extends PlayAreaBase<Domino> {
                 currentPlayer.removeShift();
             }
         }
-
-//        if (!otherPlayer.isPlayAreaEmpty()) {
-//            if (currentPlayer.isShift()) {
-//                currentPlayer.addShift();
-//                otherPlayer.removeShift();
-//            } else {
-//                otherPlayer.addShift();
-//                currentPlayer.removeShift();
-//            }
-//        }
 
         if (MainConsole.DEBUG) {
             //FIXME

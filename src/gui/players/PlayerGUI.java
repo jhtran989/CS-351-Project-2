@@ -1,15 +1,12 @@
 package gui.players;
 
-import basePieces.BoneyardBase;
 import basePieces.Player;
-import console.gamePieces.Domino;
 import constants.SideOfBoard;
 import gui.gamePieces.BoneyardGUI;
 import gui.gamePieces.DominoGUI;
 import gui.gamePieces.GuiStuff;
 import gui.gamePieces.HandGUI;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -33,7 +30,7 @@ public abstract class PlayerGUI extends Player<DominoGUI> {
 
     public void setGuiStuff(GuiStuff guiStuff) {
         this.guiStuff = guiStuff;
-        ((HandGUI) hand).setDominoSelectedLabel(guiStuff);
+        ((HandGUI) hand).setLabels(guiStuff);
     }
 
     @Override

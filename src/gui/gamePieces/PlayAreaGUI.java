@@ -15,12 +15,17 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
     private Player<DominoGUI> otherPlayer;
     private HBox humanPlayAreaHB;
     private HBox computerPlayAreaHB;
+    private String endGameMessage;
 
     public PlayAreaGUI(BoneyardBase<DominoGUI> boneyard,
                        Player<DominoGUI> humanPlayer,
                        Player<DominoGUI> computerPlayer) {
         super(boneyard, humanPlayer,
                 computerPlayer);
+    }
+
+    public String getEndGameMessage() {
+        return endGameMessage;
     }
 
     public void startGame() {
@@ -36,7 +41,7 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
         }
     }
 
-    public void transitionPhase() {
+    public boolean transitionPhase() {
         if (MainGUI.DEBUG) {
             System.out.println("Current player: " + currentPlayer);
             System.out.println("Other player: " + otherPlayer);
@@ -64,6 +69,13 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
         updatePlayArea();
         printPlayArea();
 
+        if (currentPlayer.isPlayAreaEmpty()
+                || !(humanPlayer.isTakeTurn()
+                || computerPlayer.isTakeTurn())) {
+            initiateEndGame(currentPlayer);
+            return false;
+        }
+
         currentPlayer = getOtherPlayer(currentPlayer);
         otherPlayer = getOtherPlayer(currentPlayer);
 
@@ -74,11 +86,7 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
             computerPlayer.printTray();
         }
 
-        if (currentPlayer.isPlayAreaEmpty()
-                || !(humanPlayer.isTakeTurn()
-                || computerPlayer.isTakeTurn())) {
-            initiateEndGame(currentPlayer);
-        }
+        return true;
     }
 
     protected void updatePlayArea() {
@@ -99,7 +107,31 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
         int humanCount = humanPlayer.getPlayAreaCountDomino();
         int computerCount = computerPlayer.getPlayAreaCountDomino();
 
+        if (MainConsole.DEBUG) {
+            //FIXME
+            System.out.println("Human count: " + humanCount);
+            System.out.println("Computer count: " + computerCount);
+        }
 
+        endGameMessage = "Human count: " + humanCount + "\n" + "Computer " +
+                "count: " + computerCount + "\n";
+        String winnerMessage;
+        if (humanCount == computerCount) {
+            winnerMessage = "Since both players have the same count, the "
+                    + lastPlayer.getName() + " won the game!";
+            endGameMessage += winnerMessage;
+            System.out.println(winnerMessage);
+        } else if (humanCount < computerCount) {
+            winnerMessage = "The " + humanPlayer.getName() + " player won " +
+                    "the game!";
+            endGameMessage += winnerMessage;
+            System.out.println(winnerMessage);
+        } else {
+            winnerMessage = "The " + computerPlayer.getName() + " player " +
+                    "won the game!";
+            endGameMessage += winnerMessage;
+            System.out.println(winnerMessage);
+        }
     }
 
     private void printPlayArea() {

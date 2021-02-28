@@ -5,6 +5,11 @@ import console.gamePieces.Domino;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base for the play area (lots of differentiation between the console and
+ * GUI version, and that is why the base class itself is pretty bare)
+ * @param <DominoType>
+ */
 public abstract class PlayAreaBase<DominoType extends Domino> {
     protected final BoneyardBase<DominoType> boneyard;
     protected final Player<DominoType> humanPlayer;

@@ -7,6 +7,12 @@ import console.gamePieces.Boneyard;
 import console.gamePieces.Domino;
 import console.gamePieces.Hand;
 
+/**
+ * The base player class for the console version. As shown, hand
+ * initialization will happen in the specific version and includes separate
+ * implementation for the console version. Kind of simple since the dominos
+ * themselves are printed and handled in the game logic.
+ */
 public abstract class PlayerConsole extends Player<Domino> {
     public PlayerConsole(Boneyard boneyard) {
         super(boneyard);

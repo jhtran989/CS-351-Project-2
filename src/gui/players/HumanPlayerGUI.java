@@ -5,6 +5,7 @@ import exceptions.*;
 import gui.MainGUI;
 import gui.gamePieces.*;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -29,6 +30,16 @@ public class HumanPlayerGUI extends PlayerGUI {
             guiStuff.getGameUpdateLabel().updateLabel("Note: You " +
                     "have no valid moves. Please end your turn by pressing " +
                     "the Pass button");
+            System.out.println("Note: You " +
+                    "have no valid moves. Please end your turn by pressing " +
+                    "the Pass button");
+
+            Alert noValidMoveAlert = new Alert(Alert.AlertType.WARNING);
+            noValidMoveAlert.setTitle("No valid moves available");
+            noValidMoveAlert.setContentText("Note: You " +
+                    "have no valid moves. Please end your turn by pressing " +
+                    "the Pass button");
+            noValidMoveAlert.show();
         }
     }
 
@@ -62,15 +73,52 @@ public class HumanPlayerGUI extends PlayerGUI {
                 guiStuff.getGameUpdateLabel().updateLabel(
                         outputMessage);
 
+                if (MainGUI.DEBUG) {
+                    System.out.println("Branch left");
+                    System.out.println("Human num play area: " +
+                            getPlayAreaNumDominos());
+                    System.out.println("Computer num play area: " +
+                            otherPlayer.getPlayAreaNumDominos());
+                }
+
                 if (setupNumsToMatch) {
-                    if (currentDomino.getRightSide() != numsToMatch.get(0)) {
-                        throw new DominoMismatchException();
+                    if (getPlayAreaNumDominos() ==
+                            otherPlayer.getPlayAreaNumDominos()) {
+                        if (currentDomino.getRightSide() !=
+                                numsToMatch.get(0)) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 1a");
+                            }
+                            throw new DominoMismatchException();
+                        } else if (sideToPlay != matchSideOtherPlayer) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 1b");
+                            }
+                            throw new SideOfBoardMismatchException();
+                        }
+                    } else if (getPlayAreaNumDominos() <
+                            otherPlayer.getPlayAreaNumDominos()) {
+                        if (currentDomino.getLeftSide() != numsToMatch.get(0)
+                                || currentDomino.getRightSide() !=
+                                numsToMatch.get(1)) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 2");
+                            }
+                            throw new DominoMismatchException();
+                        }
+                    } else {
+                        if (MainGUI.DEBUG) {
+                            System.out.println("Option 3");
+                        }
+                        throw new NoValidMovesException();
                     }
                 }
 
                 playDominoInPlayArea(
                         currentDominoIndex,
                         SideOfBoard.LEFT);
+                guiStuff.getHumanPlayerNumDominosLabel().
+                        setText(getDisplayName());
 
                 if (getNumDominos() > 1) {
                     shift = false;
@@ -83,21 +131,59 @@ public class HumanPlayerGUI extends PlayerGUI {
                 canPlayDomino = true;
                 canDrawDomino = true;
 
+                takeTurn = true;
+
                 return true;
             } else {
                 outputMessage += "right";
                 guiStuff.getGameUpdateLabel().updateLabel(
                         outputMessage);
 
+                if (MainGUI.DEBUG) {
+                    System.out.println("Branch right");
+                    System.out.println("Human num play area: " +
+                            getPlayAreaNumDominos());
+                    System.out.println("Computer num play area: " +
+                            otherPlayer.getPlayAreaNumDominos());
+                }
+
                 if (setupNumsToMatch) {
-                    if (currentDomino.getLeftSide() != numsToMatch.get(0)) {
-                        throw new DominoMismatchException();
+                    if (getPlayAreaNumDominos() == otherPlayer.
+                            getPlayAreaNumDominos()) {
+                        if (currentDomino.getLeftSide() != numsToMatch.get(0)) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 1a");
+                            }
+                            throw new DominoMismatchException();
+                        } else if (sideToPlay != matchSideOtherPlayer) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 1b");
+                            }
+                            throw new SideOfBoardMismatchException();
+                        }
+                    } else if (getPlayAreaNumDominos() <
+                            otherPlayer.getPlayAreaNumDominos()) {
+                        if (currentDomino.getLeftSide() != numsToMatch.get(0)
+                                || currentDomino.getRightSide() !=
+                                numsToMatch.get(1)) {
+                            if (MainGUI.DEBUG) {
+                                System.out.println("Option 2");
+                            }
+                            throw new DominoMismatchException();
+                        }
+                    } else {
+                        if (MainGUI.DEBUG) {
+                            System.out.println("Option 3");
+                        }
+                        throw new NoValidMovesException();
                     }
                 }
 
                 playDominoInPlayArea(
                         currentDominoIndex,
                         SideOfBoard.RIGHT);
+                guiStuff.getHumanPlayerNumDominosLabel().
+                        setText(getDisplayName());
 
                 // No change to shift (same shift position)
                 // Any player can place a domino to the right and still
@@ -111,9 +197,13 @@ public class HumanPlayerGUI extends PlayerGUI {
                 canPlayDomino = true;
                 canDrawDomino = true;
 
+                takeTurn = true;
+
                 return true;
             }
-        } catch (PlayDominoException | DominoMismatchException exception) {
+        } catch (PlayDominoException | DominoMismatchException
+                | SideOfBoardMismatchException
+                | NoValidMovesException exception) {
             System.out.println(exception.getMessage());
             guiStuff.getGameUpdateLabel().updateLabel(
                     exception.getMessage());
@@ -142,6 +232,10 @@ public class HumanPlayerGUI extends PlayerGUI {
 
             guiStuff.getGameUpdateLabel().updateLabel("You drew "
                     + domino);
+            guiStuff.getHumanPlayerNumDominosLabel().setText(getDisplayName());
+
+            // Update the canPlayDomino conditional if the draw was successful
+            canPlayDomino = true;
 
             updateHumanHandHB();
 

@@ -3,10 +3,18 @@ package basePieces;
 import console.MainConsole;
 import constants.SideOfBoard;
 import console.gamePieces.Domino;
-import exceptions.PlayDominoException;
 
 import java.util.*;
 
+/**
+ * Base for the Player class. Contains a variety of variables to check during
+ * the course of the game as well as key game pieces, like the hand and list
+ * of dominos in the play area. Has the primary method conductTurn() to
+ * execute the primary actions in the game (GUI modifies this a bit since the
+ * actions are moved to the buttons).
+ *
+ * @param <DominoType>
+ */
 public abstract class Player<DominoType extends Domino> {
     protected HandBase<DominoType> hand;
     protected List<DominoType> playAreaDominos;
@@ -18,7 +26,7 @@ public abstract class Player<DominoType extends Domino> {
     protected boolean canPlayDomino;
     protected boolean canDrawDomino;
     protected Map<SideOfBoard, Integer> sideNumMatchPair;
-    protected SideOfBoard matchSide;
+    protected SideOfBoard matchSideOtherPlayer;
 
     public Player(BoneyardBase<DominoType> boneyard) {
         // TODO: moved hand initialization to subclasses...
@@ -32,6 +40,11 @@ public abstract class Player<DominoType extends Domino> {
         sideNumMatchPair = new TreeMap<>();
     }
 
+    /**
+     * The primary method for the console version for all the actions and
+     * checks to be performed during a turn. Relegates down to just side
+     * checks in the GUI version, as mentioned above.
+     */
     public void conductTurn() {
         setNumsToMatch();
         setSideNumMatchPair();
@@ -54,6 +67,10 @@ public abstract class Player<DominoType extends Domino> {
         }
 
         System.out.println();
+    }
+
+    public void setTakeTurn(boolean takeTurn) {
+        this.takeTurn = takeTurn;
     }
 
     /**
@@ -91,11 +108,11 @@ public abstract class Player<DominoType extends Domino> {
                 if (isShift()) { // extend to the left
                     numsToMatch.add(
                             otherPlayer.getFirstPlayDomino().getLeftSide());
-                    matchSide = SideOfBoard.LEFT;
+                    matchSideOtherPlayer = SideOfBoard.LEFT;
                 } else { // extend to the right
                     numsToMatch.add(
                             otherPlayer.getLastPlayDomino().getRightSide());
-                    matchSide = SideOfBoard.RIGHT;
+                    matchSideOtherPlayer = SideOfBoard.RIGHT;
                 }
             } else {
                 System.out.println("Extreme case reached...");
@@ -113,6 +130,14 @@ public abstract class Player<DominoType extends Domino> {
         }
     }
 
+    /**
+     * Actually sets the mapping of the values to match and the side on to
+     * domino to match with. The general algorithm is to check if this player
+     * has less, equal, or more dominos in play. If this player has less,
+     * then there's two options to check (mostly for the computer since the
+     * player goes first), and if this player has the same, then there's only
+     * one availabel move to make (mostly for the player for the same reason).
+     */
     protected void setSideNumMatchPair() {
         sideNumMatchPair.clear();
 
@@ -130,7 +155,7 @@ public abstract class Player<DominoType extends Domino> {
                 }
             } else if (getPlayAreaNumDominos() ==
                     otherPlayer.getPlayAreaNumDominos()) {
-                sideNumMatchPair.put(matchSide, numsToMatch.get(0));
+                sideNumMatchPair.put(matchSideOtherPlayer, numsToMatch.get(0));
             } else {
                 System.out.println("No valid moves...");
                 return;
@@ -138,6 +163,14 @@ public abstract class Player<DominoType extends Domino> {
         }
     }
 
+    /**
+     * Debug uses and to crucially return from the call in findDominoInHand()
+     * to circumvent the weird conditions during the first turn (mainly for
+     * the human player since there's really nothing to check)
+     *
+     * @return if there no dominos in play already (specific conditions to
+     * check), then return true; otherwise, return false
+     */
     protected boolean handDEBUG() {
         if (Main.DEBUG) {
             //FIXME
@@ -156,6 +189,16 @@ public abstract class Player<DominoType extends Domino> {
         return false;
     }
 
+    /**
+     * Checks to see if there is a possible domino in the hand that can be
+     * played. Goes through the possible mappings and returns the first
+     * domino that can be played (as a valid move).
+     *
+     * Precondition: sideNumMatchPair has already been set to the correct
+     * condtions (values and sides) to check
+     * @param autoRotate if the domino should be rotated before being returned
+     * @return the matching domino (null if none are found)
+     */
     protected DominoType findDominoInHand(boolean autoRotate) {
         DominoType dominoMatch = null; // default value
 
@@ -214,6 +257,12 @@ public abstract class Player<DominoType extends Domino> {
         return takeTurn;
     }
 
+    /**
+     * Counts the dominos in the play area and returns the total count (end
+     * game)
+     *
+     * @return count of dominos in play area
+     */
     public int getPlayAreaCountDomino() {
         int totalPlayCount = 0;
         for (DominoType playAreaDomino : playAreaDominos) {
@@ -232,6 +281,14 @@ public abstract class Player<DominoType extends Domino> {
         return playAreaDominos.get(playAreaDominos.size() - 1);
     }
 
+    /**
+     * If the domino should be played on the left, then the domino should be
+     * inserted at the beginning of the list of play area dominos; otherwise,
+     * insert at the end
+     *
+     * @param handIndex index of domino in hand to be played
+     * @param matchSide which side to play the domino
+     */
     public void playDominoInPlayArea(int handIndex, SideOfBoard matchSide) {
         if (matchSide == SideOfBoard.LEFT) {
             playAreaDominos.add(0,
@@ -241,6 +298,12 @@ public abstract class Player<DominoType extends Domino> {
         }
     }
 
+    /**
+     * Same as above
+     *
+     * @param domino
+     * @param matchSide
+     */
     public void playDominoInPlayArea(DominoType domino, SideOfBoard matchSide) {
         if (matchSide == SideOfBoard.LEFT) {
             playAreaDominos.add(0, hand.playDomino(domino));

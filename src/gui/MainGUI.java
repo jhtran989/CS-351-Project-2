@@ -4,15 +4,11 @@ import constants.SideOfBoard;
 import gui.gamePieces.*;
 import gui.players.ComputerPlayerGUI;
 import gui.players.HumanPlayerGUI;
-import gui.players.PlayerGUI;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -68,7 +64,7 @@ public class MainGUI extends Application {
         combinedPlayAreaVB.getChildren().addAll(combinedPlayAreaLabel,
                 humanPlayAreaHB,
                 computerPlayAreaHB);
-        combinedPlayAreaVB.setAlignment(Pos.TOP_CENTER);
+        combinedPlayAreaVB.setAlignment(Pos.CENTER);
 
         // Play area scroll pane
         ScrollPane playAreaScrollPane = new ScrollPane();
@@ -80,12 +76,13 @@ public class MainGUI extends Application {
         Label humanHandLabel = new Label("Human Hand:");
         HBox humanHandHB = new HBox();
         humanHandHB.getChildren().addAll(humanPlayer.getHandImageList());
-        humanHandHB.setAlignment(Pos.CENTER);
+        humanHandHB.setAlignment(Pos.TOP_CENTER);
 
         VBox humanHandVB = new VBox();
         humanHandVB.getChildren().addAll(humanHandLabel,
                 humanHandHB);
-        humanHandVB.setAlignment(Pos.BOTTOM_CENTER);
+        humanHandVB.setAlignment(Pos.TOP_CENTER);
+        humanHandHB.setPrefHeight(DominoGUI.DOMINO_HEIGHT + 15.0);
 
         // Human hand scroll pane
         ScrollPane humanHandScrollPane = new ScrollPane();
@@ -193,6 +190,11 @@ public class MainGUI extends Application {
         borderPane.setCenter(playAreaScrollPane);
         BorderPane.setAlignment(playAreaScrollPane, Pos.CENTER);
 
+        BorderPane.setMargin(humanHandScrollPane,
+                new Insets(10));
+        BorderPane.setMargin(playAreaScrollPane,
+                new Insets(10));
+
         primaryStage.setTitle("Dominos");
         primaryStage.setScene(new Scene(borderPane, 1200, 400));
         primaryStage.show();
@@ -213,7 +215,9 @@ public class MainGUI extends Application {
         GuiStuff guiStuff = new GuiStuff(gameUpdateLabel,
                 dominoSelectedLabel,
                 sideOfBoardComboBox,
-                rotateComboBox);
+                rotateComboBox, boneyardLabel,
+                humanPlayerNumDominosLabel,
+                computerPlayerNumDominosLabel);
 
         humanPlayer.setGuiStuff(guiStuff);
         humanPlayer.setHumanHandHB(humanHandHB);
@@ -223,13 +227,25 @@ public class MainGUI extends Application {
 
         playArea.startGame();
 
+        Alert endGameAlert = new Alert(Alert.AlertType.CONFIRMATION);
+
         playButton.setOnAction(event -> {
             humanPlayer.conductTurn();
             if (humanPlayer.playDomino()) {
-                playArea.transitionPhase();
+                if (!playArea.transitionPhase()) {
+                    endGameAlert.setContentText(playArea.getEndGameMessage());
+                    endGameAlert.setTitle("End Game has been reached");
+                    endGameAlert.show();
+                    return;
+                }
+
                 computerPlayer.conductTurn();
                 if (computerPlayer.isTakeTurn()) {
-                    playArea.transitionPhase();
+                    if (!playArea.transitionPhase()) {
+                        endGameAlert.setContentText(playArea.getEndGameMessage());
+                        endGameAlert.setTitle("End Game has been reached");
+                        endGameAlert.show();
+                    }
                 }
             }
         });
@@ -246,10 +262,22 @@ public class MainGUI extends Application {
             humanPlayer.setCanDrawDomino(true);
             humanPlayer.setCanPlayDomino(true);
 
-            playArea.transitionPhase();
+            humanPlayer.setTakeTurn(false);
+
+            if (!playArea.transitionPhase()) {
+                endGameAlert.setContentText(playArea.getEndGameMessage());
+                endGameAlert.setTitle("End Game has been reached");
+                endGameAlert.show();
+                return;
+            }
+
             computerPlayer.conductTurn();
             if (computerPlayer.isTakeTurn()) {
-                playArea.transitionPhase();
+                if (!playArea.transitionPhase()) {
+                    endGameAlert.setContentText(playArea.getEndGameMessage());
+                    endGameAlert.setTitle("End Game has been reached");
+                    endGameAlert.show();
+                }
             }
         });
     }

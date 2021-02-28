@@ -12,7 +12,7 @@ public class CustomImageView {
         WritableImage blank = new WritableImage(1, 1);
         PixelWriter pixelWriter = blank.getPixelWriter();
 
-        Color color = new Color(1, 1, 1, 1);
+        Color color = new Color(1, 1, 1, 0);
         pixelWriter.setColor(0, 0, color);
 
         ImageView blankImage = new ImageView(blank);

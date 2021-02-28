@@ -3,6 +3,10 @@ package console.gamePieces;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The "Base" class of the domino. Contains left and right values (as well as
+ * orientation defined by the relative positions of the values)
+ */
 public class Domino {
     private int leftSide;
     private int rightSide;
@@ -39,6 +43,11 @@ public class Domino {
         this.rightSide = domino.getRightSide();
     }
 
+    /**
+     * Sequentially adds all 28 dominos to the boneyard
+     *
+     * @return list of dominos initially in the boneyard
+     */
     public static List<Domino> setUpBoneyard() {
         List<Domino> newBoneyard = new ArrayList<>();
 

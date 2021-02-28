@@ -8,11 +8,22 @@ import console.gamePieces.Domino;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * Computer player for the console version. Kind of simple besides the
+ * algorithm to find a viable move. The noticeable difference from the human
+ * player is the drawSequence() method that clumps all of the draws of
+ * dominos together
+ */
 public class ComputerPlayer extends PlayerConsole {
     public ComputerPlayer(Boneyard boneyard) {
         super(boneyard);
     }
 
+    /**
+     * If there was a match found, play the domino. If not, initiate the draw
+     * sequence until a match is found. When drawing is not possible, pass
+     * the turn.
+     */
     @Override
     public void conductTurn() {
         super.conductTurn();
@@ -74,9 +85,14 @@ public class ComputerPlayer extends PlayerConsole {
         return matchSide;
     }
 
+    /**
+     * Keeps drawing until a match is found, or the boneyard runs out of
+     * dominos (whichever comes first)
+     * @return true if a match was found; false if no match (can't keep drawing)
+     */
     private boolean drawSequence() {
         Domino newDomino = hand.drawDomino();
-        System.out.println("The computer drew " + newDomino);
+        System.out.println("The computer drew " +  newDomino);
 
         SideOfBoard matchSide;
         while (newDomino != null) {

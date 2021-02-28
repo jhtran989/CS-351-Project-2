@@ -2,20 +2,29 @@ package gui.gamePieces;
 
 import constants.SideOfBoard;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 
 public class GuiStuff {
-    private CustomLabel gameUpdateLabel;
-    private CustomLabel dominoSelectedLabel;
-    private ComboBox<SideOfBoard> sideOfBoardComboBox;
-    private ComboBox<Rotate> rotateComboBox;
+    private final CustomLabel gameUpdateLabel;
+    private final CustomLabel dominoSelectedLabel;
+    private final ComboBox<SideOfBoard> sideOfBoardComboBox;
+    private final ComboBox<Rotate> rotateComboBox;
+    private final Label boneyardLabel;
+    private final Label humanPlayerNumDominosLabel;
+    private final Label computerPlayerNumDominosLabel;
 
     public GuiStuff(CustomLabel gameUpdateLabel, CustomLabel dominoSelectedLabel,
                     ComboBox<SideOfBoard> sideOfBoardComboBox,
-                    ComboBox<Rotate> rotateComboBox) {
+                    ComboBox<Rotate> rotateComboBox, Label boneyardLabel,
+                    Label humanPlayerNumDominosLabel,
+                    Label computerPlayerNumDominosLabel) {
         this.gameUpdateLabel = gameUpdateLabel;
         this.dominoSelectedLabel = dominoSelectedLabel;
         this.sideOfBoardComboBox = sideOfBoardComboBox;
         this.rotateComboBox = rotateComboBox;
+        this.boneyardLabel = boneyardLabel;
+        this.humanPlayerNumDominosLabel = humanPlayerNumDominosLabel;
+        this.computerPlayerNumDominosLabel = computerPlayerNumDominosLabel;
     }
 
     public CustomLabel getGameUpdateLabel() {
@@ -32,5 +41,17 @@ public class GuiStuff {
 
     public ComboBox<Rotate> getRotateComboBox() {
         return rotateComboBox;
+    }
+
+    public Label getBoneyardLabel() {
+        return boneyardLabel;
+    }
+
+    public Label getHumanPlayerNumDominosLabel() {
+        return humanPlayerNumDominosLabel;
+    }
+
+    public Label getComputerPlayerNumDominosLabel() {
+        return computerPlayerNumDominosLabel;
     }
 }

@@ -80,6 +80,7 @@ public class ComputerPlayerGUI extends PlayerGUI {
         System.out.println("The computer drew " + newDomino);
         guiStuff.getGameUpdateLabel().updateLabel(
                 "The computer drew " + newDomino);
+        guiStuff.getComputerPlayerNumDominosLabel().setText(getDisplayName());
 
         SideOfBoard matchSide;
         while (newDomino != null) {
@@ -94,6 +95,8 @@ public class ComputerPlayerGUI extends PlayerGUI {
                 System.out.println("The computer drew " + newDomino);
                 guiStuff.getGameUpdateLabel().updateLabel(
                         "The computer drew " + newDomino);
+                guiStuff.getComputerPlayerNumDominosLabel().
+                        setText(getDisplayName());
             }
         }
 
@@ -101,14 +104,17 @@ public class ComputerPlayerGUI extends PlayerGUI {
     }
 
     private void playDomino(SideOfBoard matchSide, DominoGUI newDomino) {
-        System.out.print("Playing " + newDomino + " at ");
+        String playDominoText = "Computer GUI playing " + newDomino + " at ";
+        System.out.print(playDominoText);
         if (matchSide == SideOfBoard.LEFT) {
             System.out.println("left");
+            playDominoText += "left";
             playDominoInPlayArea(newDomino, matchSide);
 
             shift = false;
         } else {
             System.out.println("right");
+            playDominoText += "right";
             playDominoInPlayArea(newDomino, matchSide);
 
             // No change to shift (same shift position)
@@ -116,6 +122,9 @@ public class ComputerPlayerGUI extends PlayerGUI {
             // have no shift; the other case would require one of the
             // players to skip a turn...
         }
+
+        guiStuff.getGameUpdateLabel().updateLabel(playDominoText);
+        guiStuff.getComputerPlayerNumDominosLabel().setText(getDisplayName());
     }
 
     @Override

@@ -7,9 +7,15 @@ import console.gamePieces.Domino;
 import exceptions.*;
 import utilities.CustomParser;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * The Human player for the console version. In order to sort out the input,
+ * a scanner was used with a custom parser in the utilities package. Similar
+ * to the computer player, but a lot more checking (thrown exceptions are
+ * found in the exceptions package) of the input and making sure the player
+ * doesn't mess up the game logic
+ */
 public class HumanPlayer extends PlayerConsole {
     private final Scanner scanner;
 
@@ -19,6 +25,10 @@ public class HumanPlayer extends PlayerConsole {
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Includes three possible actions: play a domino, draw from the
+     * boneyard, or pass the turn
+     */
     @Override
     public void conductTurn() {
         super.conductTurn();
@@ -101,8 +111,15 @@ public class HumanPlayer extends PlayerConsole {
             System.out.println("Left or Right? (l/r)");
             input = scanner.nextLine();
             char leftRight = CustomParser.parseChar(input);
+            SideOfBoard sideToPlay = null;
             if (leftRight != 'l' && leftRight != 'r') {
                 throw new InputErrorException();
+            } else {
+                if (leftRight == 'l') {
+                    sideToPlay = SideOfBoard.LEFT;
+                } else {
+                    sideToPlay = SideOfBoard.RIGHT;
+                }
             }
 
             System.out.println("Rotate first? (y/n)");
@@ -111,6 +128,7 @@ public class HumanPlayer extends PlayerConsole {
             if (rotate != 'y' && rotate != 'n') {
                 throw new InputErrorException();
             }
+
             if (rotate == 'y') {
                 domino.rotateDomino();
             }
@@ -120,7 +138,10 @@ public class HumanPlayer extends PlayerConsole {
                 System.out.println("left");
 
                 if (setupNumsToMatch) {
-                    if (domino.getRightSide() != numsToMatch.get(0)) {
+                    if (domino.getRightSide() != numsToMatch.get(0) ||
+                            ((getPlayAreaNumDominos() ==
+                                    otherPlayer.getPlayAreaNumDominos())
+                                    && sideToPlay != matchSideOtherPlayer)) {
                         throw new DominoMismatchException();
                     }
                 }
@@ -135,7 +156,10 @@ public class HumanPlayer extends PlayerConsole {
                 System.out.println("right");
 
                 if (setupNumsToMatch) {
-                    if (domino.getLeftSide() != numsToMatch.get(0)) {
+                    if (domino.getLeftSide() != numsToMatch.get(0) ||
+                            ((getPlayAreaNumDominos() ==
+                                    otherPlayer.getPlayAreaNumDominos())
+                                    && sideToPlay != matchSideOtherPlayer)) {
                         throw new DominoMismatchException();
                     }
                 }

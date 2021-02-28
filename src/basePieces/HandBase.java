@@ -9,6 +9,14 @@ import gui.gamePieces.DominoGUI;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Base for the hand. Contains the boneyard which to draw dominos from and a
+ * list of dominos to represent the ones in the hand (to draw to and play from)
+ * Also contains general methods for manipulating and finding/searching
+ * dominos in the hand
+ *
+ * @param <DominoType>
+ */
 public class HandBase<DominoType extends Domino> {
     protected final BoneyardBase<DominoType> boneyard;
     protected final List<DominoType> hand;
@@ -24,6 +32,11 @@ public class HandBase<DominoType extends Domino> {
         return hand;
     }
 
+    /**
+     * Draws a random domino from the boneyard
+     *
+     * @return a random domino
+     */
     public DominoType drawDomino() {
         DominoType domino = boneyard.removeRandomDomino();
 
@@ -53,6 +66,12 @@ public class HandBase<DominoType extends Domino> {
         return domino;
     }
 
+    /**
+     * Checks if the index given was within bounds of the size of the hand
+     *
+     * @param index index given
+     * @throws DominoOutOfBoundsException
+     */
     public void checkDominoBounds(int index) throws DominoOutOfBoundsException {
         if (index < 0 || index >= hand.size()) {
             throw new DominoOutOfBoundsException();
@@ -147,6 +166,14 @@ public class HandBase<DominoType extends Domino> {
         return null; // returns null if the domino value was not found
     }
 
+    /**
+     * Mostly for debug purposes (to display if the domino was rotated and
+     * which side the domino should be played)
+     *
+     * @param dominoValue value of the domino to check
+     * @param domino domino being checked
+     * @param matchSide side of the domino to match with (other player)
+     */
     public void rotateDEBUG(int dominoValue, DominoType domino,
                             SideOfBoard matchSide) {
         if (dominoValue == domino.getLeftSide()) {
