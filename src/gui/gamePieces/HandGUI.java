@@ -8,6 +8,16 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.*;
 
+/**
+ * Much different from the console version...There's a lot of other things to
+ * check (like which domino is currently selected in the hand) and results in
+ * a lot of the methods being overridden from the base class. It also uses
+ * some of the GUI stuff to update the label of which domino was selected,
+ * which first needs an event handler since the images themselves (ImageView)
+ * doesn't have a built in event handler for a mouse click (has to be added
+ * for every domino added to the hand, and removed for every domino that
+ * leaves the hand...)
+ */
 public class HandGUI extends HandBase<DominoGUI> {
     //FIXME: temporary for seeing the hand...
     protected List<ImageView> handImageList;
@@ -28,11 +38,21 @@ public class HandGUI extends HandBase<DominoGUI> {
         setMouseClickListenerInHand();
     }
 
+    /**
+     * The labels are not initialized in the constructor (called separately
+     * to set the labels so they can be updated)
+     *
+     * @param guiStuff object containing the GUI stuff
+     */
     public void setLabels(GuiStuff guiStuff) {
         dominoSelectedLabel = guiStuff.getDominoSelectedLabel();
         boneyardLabel = guiStuff.getBoneyardLabel();
     }
 
+    /**
+     * Initially sets the image list of dominos used to display them in the
+     * GUI version
+     */
     //TODO: should be set initially
     public void setDominoImageList() {
         //FIXME
@@ -55,6 +75,13 @@ public class HandGUI extends HandBase<DominoGUI> {
         return handDominoImageMap;
     }
 
+    /**
+     * Using a map, finds the domino linked to the given image of the domino
+     * (works since its one to one: every key (domino) has a unique value
+     * (image))
+     * @param imageView
+     * @return
+     */
     public DominoGUI findDominoInHandMap(ImageView imageView) {
         for (Map.Entry<DominoGUI, ImageView> dominoGUIImageViewEntry :
                 handDominoImageMap.entrySet()) {
@@ -133,6 +160,15 @@ public class HandGUI extends HandBase<DominoGUI> {
         return dominoGUI;
     }
 
+    /**
+     * In addition to the implementation in the console version, the map had
+     * to be updated (so the images are also updated) as well as removing the
+     * mouse click listener so weird things don't happen when the user clicks
+     * on them in the play area...
+     *
+     * @param index index of domino in hand to play
+     * @return domino to play
+     */
     @Override
     public DominoGUI playDomino(int index) {
         DominoGUI dominoGUI = super.playDomino(index);
@@ -142,6 +178,15 @@ public class HandGUI extends HandBase<DominoGUI> {
         return dominoGUI;
     }
 
+    /**
+     * In addition to the implementation in the console version, the map had
+     * to be updated (so the images are also updated) as well as removing the
+     * mouse click listener so weird things don't happen when the user clicks
+     * on them in the play area...
+     *
+     * @param domino domino in hand to play
+     * @return domino to play
+     */
     @Override
     public DominoGUI playDomino(DominoGUI domino) {
         handImageList.remove(domino.getDominoImage());
@@ -150,6 +195,13 @@ public class HandGUI extends HandBase<DominoGUI> {
         return super.playDomino(domino);
     }
 
+    /**
+     * Just puts all of the things to do when adding a domino to the hand in
+     * one place (updates the map, adds the mouse click listener, and updates
+     * the number of dominos in the boneyard since a domino was drawn)
+     *
+     * @param dominoGUI domino to add to hand
+     */
     private void addDominoToHand(DominoGUI dominoGUI) {
         hand.add(dominoGUI);
         handImageList.add(dominoGUI.getDominoImage());

@@ -10,11 +10,20 @@ import gui.gamePieces.DominoGUI;
 
 import java.util.Map;
 
+/**
+ * The computer player for the GUI version. It is essentially the same as the
+ * console version, but due to lack of design foresight, a lot of the code
+ * was just copy and pasted here (some output stuff to the console were
+ * removed though and replaced with updates to the Labels in the GUI)
+ */
 public class ComputerPlayerGUI extends PlayerGUI {
     public ComputerPlayerGUI(BoneyardGUI boneyard) {
         super(boneyard);
     }
 
+    /**
+     * Pretty much the same as the console version
+     */
     @Override
     public void conductTurn() {
         super.conductTurn();

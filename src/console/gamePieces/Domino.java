@@ -5,7 +5,10 @@ import java.util.List;
 
 /**
  * The "Base" class of the domino. Contains left and right values (as well as
- * orientation defined by the relative positions of the values)
+ * orientation defined by the relative positions of the values). A domino
+ * blank was created for shifting purposes, but that created more checking
+ * and for this version, simply adding the shift when just printing it out
+ * would have saved some time...
  */
 public class Domino {
     private int leftSide;

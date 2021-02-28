@@ -8,7 +8,7 @@ public enum SideOfBoard {
     LEFT(0),
     RIGHT(1);
 
-    private int encodingIndex;
+    private final int encodingIndex;
 
     SideOfBoard(int encodingIndex) {
         this.encodingIndex = encodingIndex;

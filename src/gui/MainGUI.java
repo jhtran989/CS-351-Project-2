@@ -13,6 +13,14 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+/**
+ * Compared to the Main in the console version, it's definitely a lot longer.
+ * ..Couldn't find another elegant alternative in time to just creating
+ * everything here in the Main (since they'll have to be passed as parameters
+ * otherwise). For the pane, I used a border pane -- the different sections
+ * allowed for the GUI controls to be spread out in a simple and effective
+ * manner
+ */
 public class MainGUI extends Application {
     public static boolean DEBUG = true;
 

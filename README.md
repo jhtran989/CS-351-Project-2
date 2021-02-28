@@ -17,6 +17,10 @@ Third note: some of the comments provided were a little rushed, but should docum
 
 For the GUI, just click on one of the dominos and press the play button on the right side of the pane to play the domino (there will be a `Label` that will display the currently selected domino on the left side of the pane).
 
+The `.jar` files are configured with the debug messages ON. I might have left some vital checking inside the debug parts, so I didn't want to break the program by turning them off (and lack of time to comb through and edit the debug messages).
+
+
+
 ### doc Note
 
 Given time constraints, there wasn't enough time to produce a document detailing the objects mentioned in the design. However, I hope the information provided here and in the code itself should make the usage and implementation of the objects apparent.
@@ -50,6 +54,8 @@ There were some `Map` objects that were created, but I think one of them wasn't 
 Also, there are some inconsistencies with references to methods and method calls (i.e. call a get method when access to the variable itself is within scope).
 
 #### Console Version
+
+Important: a last minute change was made with the checking of the human player in the GUI version and the console version wasn't updated accordingly (only apparent when turns are missed and persisted for several turns).
 
 As always, there might be errors with parsing the input (all the exceptions are not caught), but given the right input, the program should work as intended.
 
@@ -97,3 +103,7 @@ is implemented a good bit throughout the project to make sure `HALF_BLANK` doesn
 The combo boxes are set to an initial value so I don't have to handle the case where the user forgot to choose an option before playing a domino.
 
 The implementation of the human and computer players in the GUI version used a good chunk of the same logic as the console version. However, due to time constraints, I wasn't able to properly move them up to the parent class, or even created a better design with maybe human and computer abstract classes instead of the single `PlayerBase` abstract class where both players share implementation from. So, a lot of the code is just copy and paste from the console version (however, there were specific variables that had to be moved around and changed a little to accommodate the GUI elements &mdash; i.e. updating the various `Label` objects).
+
+There were conflicts on whether the lists should be maintained separately along with the list of dominos themselves, or whether a map should be used to link them together. In the end, both were updated for some (like in the hand object), but for the play area, I found there really wasn't much of an advantage since I have to override methods and update the list of images anyways...
+
+For displaying the play area, the scroll pane was used so that the line of dominos could be viewed by scrolling back and forth (also used for the human hand for unfortunate cases...).

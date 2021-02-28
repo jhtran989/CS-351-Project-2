@@ -13,6 +13,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * As mentioned before, a lot of things were overridden with slightly
+ * different implementation to account for more things to update and keep
+ * track of. The play area map wasn't really used (as mentioned in the
+ * README) since there wasn't a real advantage of using it, compared to just
+ * a list of the images of the dominos
+ */
 public abstract class PlayerGUI extends Player<DominoGUI> {
     protected List<ImageView> playAreaImageList;
     protected Map<DominoGUI, ImageView> playAreaMap;
@@ -28,6 +35,10 @@ public abstract class PlayerGUI extends Player<DominoGUI> {
         playAreaMap = new LinkedHashMap<>();
     }
 
+    /**
+     * Like before, the GUI stuff are initialized outside of the constructor
+     * @param guiStuff the object containing all the GUI stuff
+     */
     public void setGuiStuff(GuiStuff guiStuff) {
         this.guiStuff = guiStuff;
         ((HandGUI) hand).setLabels(guiStuff);

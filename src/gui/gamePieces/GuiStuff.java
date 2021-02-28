@@ -4,6 +4,11 @@ import constants.SideOfBoard;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
+/**
+ * The class that stores all the GUI pieces (together in one place) that
+ * needs to be updated throughout the game (like which side of the board the
+ * user wants to play the domino at)
+ */
 public class GuiStuff {
     private final CustomLabel gameUpdateLabel;
     private final CustomLabel dominoSelectedLabel;

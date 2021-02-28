@@ -10,6 +10,14 @@ import gui.players.HumanPlayerGUI;
 import gui.players.PlayerGUI;
 import javafx.scene.layout.HBox;
 
+/**
+ * The play area in the GUI version also received a good number of changes
+ * from the console version. It no longer held main game logic, but instead,
+ * holds the beginning and end of it. To do so, the startGame() had to be
+ * tweaked and implemented into the buttons instead (spliced open and
+ * stitched back together...). However, the remaining stuff in between turns
+ * was kept and gather into the transitionPhase() method
+ */
 public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
     private Player<DominoGUI> currentPlayer;
     private Player<DominoGUI> otherPlayer;
@@ -28,6 +36,10 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
         return endGameMessage;
     }
 
+    /**
+     * Start game now only "starts" the game by setting a few things before
+     * the game starts
+     */
     public void startGame() {
         currentPlayer = humanPlayer;
         otherPlayer = computerPlayer;
@@ -41,6 +53,12 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
         }
     }
 
+    /**
+     * The intermediate things in between turns are implemented here, like
+     * determining which player has to shift their play area. In addition,
+     * the play area dominos have to be updated.
+     * @return
+     */
     public boolean transitionPhase() {
         if (MainGUI.DEBUG) {
             System.out.println("Current player: " + currentPlayer);
@@ -98,11 +116,25 @@ public class PlayAreaGUI extends PlayAreaBase<DominoGUI> {
                 ((PlayerGUI) computerPlayer).getPlayAreaImageList());
     }
 
+    /**
+     * As before with the HandGUI class, the GUI stuff are initialized
+     * outside of the constructor (called separately)
+     *
+     * @param humanPlayAreaHB play area of the human player
+     * @param computerPlayAreaHB play area of the computer player
+     */
     public void setPlayArea(HBox humanPlayAreaHB, HBox computerPlayAreaHB) {
         this.humanPlayAreaHB = humanPlayAreaHB;
         this.computerPlayAreaHB = computerPlayAreaHB;
     }
 
+    /**
+     * Has a GUI element itself where the end game message is set and called
+     * in the Main of the GUI version (comparing the count of each player, as
+     * with the console version, and deciding the winner)
+     *
+     * @param lastPlayer the player that last played a domino
+     */
     protected void initiateEndGame(Player<DominoGUI> lastPlayer) {
         int humanCount = humanPlayer.getPlayAreaCountDomino();
         int computerCount = computerPlayer.getPlayAreaCountDomino();

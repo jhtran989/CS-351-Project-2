@@ -175,15 +175,16 @@ public abstract class Player<DominoType extends Domino> {
         if (Main.DEBUG) {
             //FIXME
             System.out.println("Find in hand call");
+        }
 
-            //FIXME
-            if (!setupNumsToMatch) {
+        if (!setupNumsToMatch) {
+            if (Main.DEBUG) {
                 System.out.println("Exiting call...");
-                return true;
-                // just some output that is NOT
-                // null so
-                // canPlayDomino is still true (only to circumvent the first turn)
             }
+            return true;
+            // just some output that is NOT
+            // null so
+            // canPlayDomino is still true (only to circumvent the first turn)
         }
 
         return false;

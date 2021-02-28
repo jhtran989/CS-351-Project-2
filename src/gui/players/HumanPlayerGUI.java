@@ -10,6 +10,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
+/**
+ * The human player for the GUI version. A number of things were changed, and
+ * most noticeably, the lack of direct questions from the console asking the
+ * player about where and how the domino should be played. Instead, combo
+ * boxes were used as the input and that definitely helped reduce the
+ * checking required to proceed with the game
+ */
 public class HumanPlayerGUI extends PlayerGUI {
     protected HBox humanHandHB;
 
@@ -17,6 +24,13 @@ public class HumanPlayerGUI extends PlayerGUI {
         super(boneyard);
     }
 
+    /**
+     * Relegated to just setting up the turn (setting the nums to match and
+     * the sides of the board with the matching values). However, there's a
+     * GUI implementation of showing when no valid moves are available (the
+     * options of play and draw have to both be selected at least once before
+     * the pop up window is shown with the message)
+     */
     @Override
     public void conductTurn() {
         super.conductTurn();
@@ -43,6 +57,14 @@ public class HumanPlayerGUI extends PlayerGUI {
         }
     }
 
+    /**
+     * (Last minute change - see README in console version)
+     * Plays the selected domino to the play area. There's still some
+     * conditions to check, but remains largely the same (take turn condition
+     * now pushed up from the play area in the console version to the player)
+     *
+     * @return true if the player was able to take a turn; false otherwise
+     */
     public boolean playDomino() {
         DominoGUI matchDomino = findDominoInHand(false);
 
@@ -211,6 +233,10 @@ public class HumanPlayerGUI extends PlayerGUI {
         }
     }
 
+    /**
+     * Similar to play domino above (largely the same) and updates some of
+     * the Labels in the GUI
+     */
     public void drawDomino() {
         DominoGUI matchDomino = findDominoInHand(false);
 
